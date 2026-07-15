@@ -1,5 +1,11 @@
 # Changelog
 
+## Lecture workspace cleanup
+
+- Removed the large portal-level lecture title and description that duplicated each lesson's own introduction.
+- Replaced the duplicated header controls with one compact Home, Topics, Complete, and Search toolbar.
+- Increased the immediately visible reading area and simplified the responsive mobile toolbar.
+
 ## Navigation correction
 
 - Fixed the topic tabs in Lectures 1–9 so they scroll to the selected section inside the active lecture instead of resolving to the portal home page.
