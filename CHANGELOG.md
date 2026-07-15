@@ -1,5 +1,11 @@
 # Changelog
 
+## Navigation correction
+
+- Fixed the topic tabs in Lectures 1–9 so they scroll to the selected section inside the active lecture instead of resolving to the portal home page.
+- Corrected the Lecture 12 tab offsets so Models, Truth Tables, Wumpus World, Inference Rules, and Practice open their matching slides.
+- Applied safe in-lecture anchor handling to the embedded AI Lab as well.
+
 ## Complete course portal
 
 - Added nine classroom-ready pre-midterm lecture modules covering AI foundations, intelligent agents, problem formulation, uninformed and informed search, heuristic quality, local search, game playing, minimax, and alpha-beta pruning.
@@ -10,4 +16,3 @@
 - Added the supplied AI Lab Manual as a first-class portal destination and as the standalone `ai-lab.html` file.
 - Improved responsive reading space, keyboard navigation, reduced-motion support, visible focus states, and topic navigation.
 - Preserved the supplied Lectures 10–16 and AI Lab content byte-for-byte inside the portal.
-
