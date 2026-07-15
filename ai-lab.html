@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSAL3241 — Artificial Intelligence Lab Manual (Weeks 10–16)</title>
+<style>
+:root{
+  --blue:#1a73e8; --deepblue:#0d47a1; --green:#188038; --orange:#e8710a;
+  --purple:#7b1fa2; --red:#c5221f; --teal:#00796b;
+  --bg:#ffffff; --panel:#f8f9fb; --border:#dfe3e8; --text:#202124; --muted:#5f6368;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+/* ---------- Sidebar ---------- */
+#sidebar{position:fixed;top:0;left:0;width:270px;height:100vh;background:#f4f7fc;border-right:2px solid var(--border);overflow-y:auto;padding:18px 0;z-index:100}
+#sidebar h2{font-size:15px;color:var(--deepblue);padding:0 18px 10px;border-bottom:2px solid var(--border);margin-bottom:8px}
+#sidebar a{display:block;padding:8px 18px;color:#3c4043;text-decoration:none;font-size:13.5px;border-left:4px solid transparent}
+#sidebar a:hover{background:#e8f0fe;color:var(--blue)}
+#sidebar a.active{background:#e8f0fe;color:var(--deepblue);border-left-color:var(--blue);font-weight:600}
+#sidebar .wk{font-weight:700;color:var(--deepblue);margin-top:10px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;padding:6px 18px 2px}
+/* ---------- Main ---------- */
+#main{margin-left:270px;padding:36px 44px;max-width:1180px}
+header.hero{background:linear-gradient(120deg,#e8f0fe,#e6f4ea);border:2px solid var(--border);border-radius:16px;padding:34px;margin-bottom:34px;text-align:center}
+header.hero h1{color:var(--deepblue);font-size:30px;margin-bottom:8px}
+header.hero p{color:var(--muted);font-size:15px}
+header.hero .badge{display:inline-block;background:var(--blue);color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;margin:10px 4px 0}
+section.week{margin-bottom:56px;scroll-margin-top:20px}
+h2.wtitle{background:linear-gradient(90deg,var(--deepblue),var(--blue));color:#fff;padding:14px 22px;border-radius:12px;font-size:22px;margin-bottom:22px}
+h3{color:var(--deepblue);font-size:19px;margin:28px 0 12px;padding-bottom:6px;border-bottom:2px solid #e8f0fe;scroll-margin-top:20px}
+h4{color:var(--teal);font-size:16px;margin:18px 0 8px}
+p{margin-bottom:12px}
+ul,ol{margin:0 0 14px 26px}
+li{margin-bottom:6px}
+/* ---------- Blocks ---------- */
+.block{border-radius:12px;padding:18px 22px;margin:16px 0;border:2px solid}
+.analogy{background:#fff8e1;border-color:#f9c74f}
+.analogy .tag{color:#b26a00}
+.definition{background:#e8f0fe;border-color:#a3c4f3}
+.definition .tag{color:var(--deepblue)}
+.example{background:#e6f4ea;border-color:#a8dab5}
+.example .tag{color:var(--green)}
+.realworld{background:#fce8e6;border-color:#f5b7b1}
+.realworld .tag{color:var(--red)}
+.objective{background:#f3e8fd;border-color:#d7b3f5}
+.objective .tag{color:var(--purple)}
+.tag{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:6px}
+/* ---------- Animation box ---------- */
+.animbox{background:var(--panel);border:2px solid var(--border);border-radius:14px;padding:20px;margin:20px 0;text-align:center}
+.animbox canvas{background:#fff;border:2px solid var(--border);border-radius:10px;max-width:100%}
+.animbox .controls{margin-top:12px}
+.animbox button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;cursor:pointer;margin:0 5px;font-weight:600}
+.animbox button:hover{background:var(--deepblue)}
+.animbox button.alt{background:var(--green)}
+.animbox button.alt:hover{background:#0b5c26}
+.whatsee{background:#e8f0fe;border-left:5px solid var(--blue);border-radius:8px;padding:12px 16px;margin-top:14px;text-align:left;font-size:14px}
+.whatsee b{color:var(--deepblue)}
+/* ---------- Code ---------- */
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:20px;overflow-x:auto;font-family:Consolas,'Courier New',monospace;font-size:13.5px;line-height:1.65;margin:14px 0}
+/* ---------- Code card with tabs + fullscreen popup ---------- */
+.codecard{border:2px solid var(--border);border-radius:14px;margin:16px 0;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.tabbar{display:flex;align-items:center;gap:6px;background:#eef2f7;border-bottom:2px solid var(--border);padding:8px 12px;flex-wrap:wrap}
+.tabbar .tab{background:transparent;border:2px solid transparent;border-radius:9px;padding:7px 16px;font-size:13.5px;font-weight:600;color:#5f6368;cursor:pointer}
+.tabbar .tab.on{background:#fff;color:var(--deepblue);border-color:var(--blue)}
+.tabbar .spacer{flex:1}
+.tabbar .actbtn{background:var(--deepblue);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.tabbar .actbtn.copy{background:var(--green)}
+.tabbar .actbtn:hover{opacity:.88}
+.codecard .pane{display:none;max-height:600px;overflow:auto}
+.codecard .pane.on{display:block}
+.codecard .pane pre.code{margin:0;border-radius:0;font-size:13.5px}
+.codecard .pane table.explain{margin:0;width:100%}
+.codecard .pane table.explain th{position:sticky;top:0;z-index:2}
+/* ---------- Fullscreen modal ---------- */
+#codeModal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:1000;padding:24px}
+#codeModal.open{display:flex;flex-direction:column}
+#codeModal .mhead{display:flex;align-items:center;color:#fff;margin-bottom:12px}
+#codeModal .mhead h3{font-size:18px;flex:1;color:#fff;border:none;margin:0}
+#codeModal .mclose{background:#c5221f;color:#fff;border:none;border-radius:9px;padding:9px 20px;font-size:15px;font-weight:700;cursor:pointer}
+#codeModal .mgrid{flex:1;display:grid;grid-template-columns:minmax(0,48%) minmax(0,52%);gap:16px;min-height:0}
+#codeModal .mpane{background:#fff;border-radius:12px;overflow:auto;min-height:0}
+#codeModal .mpane.dark{background:#0f172a}
+#codeModal .mpane pre.code{margin:0;border-radius:12px;font-size:14.5px}
+#codeModal .mpane table.explain{margin:0;width:100%;font-size:14px}
+#codeModal .mpane table.explain th{position:sticky;top:0;z-index:2}
+#codeModal .mtag{position:sticky;top:0;background:var(--deepblue);color:#fff;font-weight:700;font-size:13px;padding:8px 14px;z-index:3}
+@media(max-width:1000px){#codeModal .mgrid{grid-template-columns:1fr}}
+.copied-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#188038;color:#fff;padding:11px 26px;border-radius:30px;font-weight:600;z-index:2000;display:none}
+pre.output{background:#111;color:#4ade80;border-radius:12px;padding:16px 20px;font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.6;margin:6px 0 14px;overflow-x:auto;border:2px solid #333}
+.outlabel{display:inline-block;background:#188038;color:#fff;border-radius:8px 8px 0 0;padding:5px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;margin-top:14px}
+.howto{background:#e6f4ea;border:2px solid #a8dab5;border-radius:12px;padding:18px 22px;margin:16px 0}
+.howto .tag{color:#188038}
+.stepnum{display:inline-block;background:#188038;color:#fff;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-weight:700;font-size:13px;margin-right:8px}
+pre.code .k{color:#93c5fd}pre.code .s{color:#86efac}pre.code .c{color:#94a3b8;font-style:italic}pre.code .n{color:#fca5a5}pre.code .f{color:#fcd34d}
+/* ---------- Tables ---------- */
+table.explain{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+table.explain th{background:var(--deepblue);color:#fff;padding:10px 12px;text-align:left}
+table.explain td{border:1px solid var(--border);padding:8px 12px;vertical-align:top}
+table.explain tr:nth-child(even){background:var(--panel)}
+table.explain code{background:#eef2f7;padding:2px 6px;border-radius:5px;font-family:Consolas,monospace;font-size:12.5px;color:#0d47a1}
+table.tt{border-collapse:collapse;margin:14px auto;font-size:14px}
+table.tt th{background:var(--blue);color:#fff;padding:8px 16px}
+table.tt td{border:1px solid var(--border);padding:7px 16px;text-align:center}
+.task{background:#fff3e0;border:2px solid #ffcc80;border-radius:12px;padding:18px 22px;margin:20px 0}
+.task .tag{color:var(--orange)}
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0;padding:20px}}
+</style>
+</head>
+<body>
+<nav id="sidebar">
+<h2>📘 AI Lab Manual</h2>
+<a href="#top">Course Overview</a>
+<a href="#setup">⚙️ How to Run the Code</a>
+<div class="wk">Week 10</div>
+<a href="#w10">Genetic Algorithms</a>
+<a href="#w10-queens">Lab: 8-Queens GA</a>
+<a href="#w10-tsp">Lab: TSP GA</a>
+<div class="wk">Week 11</div>
+<a href="#w11">Knowledge Representation</a>
+<a href="#w11-lab">Lab: Frames in Python</a>
+<div class="wk">Week 12</div>
+<a href="#w12">Propositional Logic</a>
+<a href="#w12-lab">Lab: Truth Tables & Wumpus</a>
+<div class="wk">Week 13</div>
+<a href="#w13">First-Order Logic</a>
+<a href="#w13-lab">Lab: Unification & River Puzzle</a>
+<div class="wk">Week 14</div>
+<a href="#w14">Neural Networks & Perceptron</a>
+<a href="#w14-lab">Lab: Perceptron AND/OR</a>
+<div class="wk">Week 15</div>
+<a href="#w15">Naïve Bayes & K-NN</a>
+<a href="#w15-lab">Lab: Classifier Code</a>
+<div class="wk">Week 16</div>
+<a href="#w16">K-Means Clustering</a>
+<a href="#w16-lab">Lab: K-Means Code</a>
+</nav>
+<div id="main">
+<header class="hero" id="top">
+<h1>CSAL3241 — Artificial Intelligence Lab</h1>
+<p><b>Instructor: Prof. Muhammad Tahir Mehmood</b> · Section CSRG6</p>
+<p>Complete Lab Manual · Weeks 10–16 · Theory + Animations + Fully Explained Python Code</p>
+<span class="badge">Genetic Algorithms</span><span class="badge">Logic & KR</span><span class="badge">Perceptron</span><span class="badge">Naïve Bayes · K-NN</span><span class="badge">K-Means</span>
+<p style="margin-top:14px;font-size:13.5px">Texts: <i>AI: A Modern Approach</i> (Russell & Norvig) · <i>AI Illuminated</i> (Ben Coppin)</p>
+</header>
+
+<!-- ================= SETUP ================= -->
+<section class="week" id="setup">
+<h2 class="wtitle">⚙️ Lab Setup — Where & How to Run Every Python Program</h2>
+
+<p>All code in this manual is <b>pure Python — no libraries to install</b> (only built-in modules: <code>random</code>, <code>math</code>, <code>itertools</code>, <code>collections</code>). You can run it three ways; pick whichever your lab PC supports.</p>
+
+<div class="howto"><span class="tag">✅ Option 1 — IDLE (comes free with Python, works offline — recommended for the lab)</span>
+<ol>
+<li><span class="stepnum">1</span>Download Python from <code>python.org/downloads</code> → run the installer → <b>tick "Add Python to PATH"</b> → Install.</li>
+<li><span class="stepnum">2</span>Open <b>IDLE</b> from the Start Menu (Start → type "IDLE").</li>
+<li><span class="stepnum">3</span>Click <b>File → New File</b>. A blank editor window opens.</li>
+<li><span class="stepnum">4</span>Copy the complete code of any lab task from this manual and paste it into the editor.</li>
+<li><span class="stepnum">5</span>Save it with a meaningful name, e.g. <code>week10_queens.py</code> (File → Save, or Ctrl+S).</li>
+<li><span class="stepnum">6</span>Press <b>F5</b> (Run → Run Module). The output appears in the IDLE Shell window — compare it with the "Expected Output" box under each program.</li>
+</ol></div>
+
+<div class="howto"><span class="tag">✅ Option 2 — Google Colab (nothing to install, needs internet)</span>
+<ol>
+<li><span class="stepnum">1</span>Open <code>colab.research.google.com</code> in Chrome and sign in with any Google account.</li>
+<li><span class="stepnum">2</span>Click <b>+ New Notebook</b>.</li>
+<li><span class="stepnum">3</span>Paste the program into the code cell.</li>
+<li><span class="stepnum">4</span>Press <b>Shift + Enter</b> (or the ▶ play button). Output prints directly below the cell.</li>
+<li><span class="stepnum">5</span>Use one cell per lab task; rename the notebook <code>AI_Lab_Week10.ipynb</code> etc. and it auto-saves to your Google Drive.</li>
+</ol></div>
+
+<div class="howto"><span class="tag">✅ Option 3 — VS Code / Command Prompt (for students who prefer a real editor)</span>
+<ol>
+<li><span class="stepnum">1</span>Install VS Code from <code>code.visualstudio.com</code> and add the <b>Python extension</b> (Extensions panel → search "Python" → Install).</li>
+<li><span class="stepnum">2</span>Create a folder <code>AI_Lab</code>, open it in VS Code (File → Open Folder), and save the code as e.g. <code>week14_perceptron.py</code>.</li>
+<li><span class="stepnum">3</span>Run it either with the ▶ button (top-right) or from the terminal: open Command Prompt in that folder and type <code>python week14_perceptron.py</code>.</li>
+</ol></div>
+
+<div class="block realworld"><span class="tag">⚠️ Common Errors & Fixes</span>
+<ul>
+<li><b>'python' is not recognized</b> → you forgot "Add Python to PATH" during install. Re-run the installer → Modify → tick it. Or use <code>py week10_queens.py</code> on Windows.</li>
+<li><b>IndentationError</b> → Python is strict about spaces. Copy the whole block exactly; don't mix tabs and spaces.</li>
+<li><b>SyntaxError on arrows/symbols</b> → symbols like → ¬ ∧ inside <i>comments</i> are fine, but never paste them into actual code lines.</li>
+<li><b>Different numbers than the Expected Output?</b> → programs using <code>random</code> (GA, K-Means) give slightly different runs each time — that is normal and expected. The <i>final answer quality</i> (fitness 28, 3 sensible clusters, 7 crossings) should match. Add <code>random.seed(7)</code> at the top to reproduce exactly.</li>
+</ul></div>
+</section>
+
+<!-- ================= WEEK 10 ================= -->
+<section class="week" id="w10">
+<h2 class="wtitle">Week 10 — Genetic Algorithms: 8-Queens & TSP</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Understand chromosome representation, fitness, selection, crossover and mutation.</li>
+<li>Solve the 8-Queens problem using a Genetic Algorithm in Python.</li>
+<li>Solve the Travelling Salesman Problem (TSP) for Pakistani cities using GA.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Mango Farming in Multan</span>
+<p>A mango farmer in Multan wants the sweetest Chaunsa mangoes. Every season he keeps seeds only from the <b>sweetest trees (selection)</b>, cross-pollinates two good trees (<b>crossover</b>), and occasionally nature produces a random variation in a seed (<b>mutation</b>). After many generations, the orchard evolves towards sweeter and sweeter mangoes. A Genetic Algorithm does exactly this — but with candidate solutions instead of trees, and a <b>fitness function</b> instead of a taste test.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definition</span>
+<p>A <b>Genetic Algorithm (GA)</b> is a search technique inspired by natural evolution. A <b>population</b> of candidate solutions (<b>chromosomes</b>) is evolved over <b>generations</b> using: <b>Fitness evaluation → Selection → Crossover → Mutation</b>, until a good-enough solution appears.</p>
+</div>
+
+<div class="block example"><span class="tag">✏️ Representation Example — 8-Queens</span>
+<p>A chromosome is a list of 8 numbers, e.g. <code>[4, 6, 8, 2, 7, 1, 3, 5]</code>. Position <i>i</i> in the list = column <i>i</i>; the value = the row of the queen in that column. This encoding automatically guarantees one queen per column, so we only need to worry about <b>row clashes</b> and <b>diagonal clashes</b>. Fitness = number of <b>non-attacking pairs</b>; maximum = 28 (all C(8,2) pairs peaceful).</p>
+</div>
+
+<div class="block realworld"><span class="tag">🌍 Real-World Implication</span>
+<p>GAs are used for university <b>timetable scheduling</b> (like fitting 19 teachers into 11 classes with no clash!), delivery route optimisation for TCS/Leopards Courier, feature selection in machine learning, and circuit layout design.</p>
+</div>
+
+<h3>Animation 1 — Watch the GA Evolve the 8-Queens Board</h3>
+<div class="animbox">
+<canvas id="cvQueens" width="760" height="420"></canvas>
+<div class="controls">
+<button onclick="qStart()">▶ Run Evolution</button>
+<button class="alt" onclick="qReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> The left board shows the <b>best chromosome</b> of the current generation — red lines mark attacking queen pairs. The right panel shows the fitness climbing towards the maximum of 28. Each tick = one generation of selection, crossover and mutation. When fitness hits 28, the red lines disappear: a perfect solution has evolved!</div>
+</div>
+
+<h3 id="w10-queens">Lab Task 10.1 — 8-Queens with Genetic Algorithm (Complete Python Code)</h3>
+<div class="codecard" id="cc1"><div class="tabbar"><button class="tab on" onclick="ccTab(1,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(1,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(1)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(1)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># 8-Queens using a Genetic Algorithm</span>
+<span class="k">import</span> random
+
+POP_SIZE = 100
+MUTATION_RATE = 0.1
+MAX_FITNESS = 28          <span class="c"># C(8,2) = 28 non-attacking pairs</span>
+
+<span class="k">def</span> <span class="f">random_chromosome</span>():
+    <span class="k">return</span> [random.randint(1, 8) <span class="k">for</span> _ <span class="k">in</span> range(8)]
+
+<span class="k">def</span> <span class="f">fitness</span>(ch):
+    clashes = 0
+    <span class="k">for</span> i <span class="k">in</span> range(8):
+        <span class="k">for</span> j <span class="k">in</span> range(i + 1, 8):
+            <span class="k">if</span> ch[i] == ch[j]:                <span class="c"># same row</span>
+                clashes += 1
+            <span class="k">if</span> abs(ch[i] - ch[j]) == j - i:   <span class="c"># same diagonal</span>
+                clashes += 1
+    <span class="k">return</span> MAX_FITNESS - clashes
+
+<span class="k">def</span> <span class="f">selection</span>(pop):
+    <span class="c"># Tournament selection: pick 3 random, keep the best</span>
+    contenders = random.sample(pop, 3)
+    <span class="k">return</span> max(contenders, key=fitness)
+
+<span class="k">def</span> <span class="f">crossover</span>(p1, p2):
+    point = random.randint(1, 7)
+    <span class="k">return</span> p1[:point] + p2[point:]
+
+<span class="k">def</span> <span class="f">mutate</span>(ch):
+    <span class="k">if</span> random.random() &lt; MUTATION_RATE:
+        idx = random.randint(0, 7)
+        ch[idx] = random.randint(1, 8)
+    <span class="k">return</span> ch
+
+population = [random_chromosome() <span class="k">for</span> _ <span class="k">in</span> range(POP_SIZE)]
+generation = 0
+
+<span class="k">while</span> <span class="k">True</span>:
+    population.sort(key=fitness, reverse=<span class="k">True</span>)
+    best = population[0]
+    <span class="k">if</span> fitness(best) == MAX_FITNESS:
+        <span class="k">break</span>
+    new_pop = population[:10]                 <span class="c"># elitism: keep top 10</span>
+    <span class="k">while</span> len(new_pop) &lt; POP_SIZE:
+        child = crossover(selection(population), selection(population))
+        new_pop.append(mutate(child))
+    population = new_pop
+    generation += 1
+
+print(<span class="s">"Solution found in generation"</span>, generation)
+print(<span class="s">"Chromosome:"</span>, best, <span class="s">"Fitness:"</span>, fitness(best))</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>import random</code></td><td>Brings in Python's random module — we need randomness for chromosomes, selection, crossover points and mutation.</td></tr>
+<tr><td><code>POP_SIZE = 100</code></td><td>Sets population size: 100 candidate boards evolve together each generation.</td></tr>
+<tr><td><code>MUTATION_RATE = 0.1</code></td><td>Each child has a 10% chance of getting a random change — keeps diversity, avoids getting stuck.</td></tr>
+<tr><td><code>MAX_FITNESS = 28</code></td><td>8 queens form C(8,2)=28 pairs. If all 28 pairs are non-attacking, the board is perfect.</td></tr>
+<tr><td><code>random_chromosome()</code></td><td>Builds one random board: a list of 8 numbers (row of queen in each column), each between 1 and 8.</td></tr>
+<tr><td><code>[random.randint(1,8) for _ in range(8)]</code></td><td>List comprehension: repeat "pick a random row" 8 times, once per column. <code>_</code> means "we don't need the loop variable".</td></tr>
+<tr><td><code>def fitness(ch):</code></td><td>Fitness function — scores a chromosome. Higher = better (fewer attacks).</td></tr>
+<tr><td><code>for i / for j in range(i+1, 8)</code></td><td>Nested loops visit each <b>pair</b> of queens exactly once (j always after i) — no double counting.</td></tr>
+<tr><td><code>if ch[i] == ch[j]</code></td><td>Same value = same row = the two queens attack each other horizontally. Count a clash.</td></tr>
+<tr><td><code>if abs(ch[i]-ch[j]) == j-i</code></td><td>Diagonal check: if row-difference equals column-difference, the queens sit on the same diagonal. Count a clash.</td></tr>
+<tr><td><code>return MAX_FITNESS - clashes</code></td><td>Convert clashes into a score to <b>maximise</b>: 28 clashes-free means fitness 28.</td></tr>
+<tr><td><code>random.sample(pop, 3)</code></td><td>Tournament selection: randomly pick 3 boards from the population without repetition.</td></tr>
+<tr><td><code>max(contenders, key=fitness)</code></td><td>The fittest of the 3 wins the tournament and becomes a parent — like a mini cricket knockout.</td></tr>
+<tr><td><code>point = random.randint(1, 7)</code></td><td>Choose a random cut point between column 1 and 7 for crossover.</td></tr>
+<tr><td><code>p1[:point] + p2[point:]</code></td><td>Single-point crossover: child takes the left part from parent 1, right part from parent 2.</td></tr>
+<tr><td><code>if random.random() &lt; MUTATION_RATE</code></td><td><code>random.random()</code> gives 0–1; below 0.1 (10% of the time) mutation happens.</td></tr>
+<tr><td><code>ch[idx] = random.randint(1, 8)</code></td><td>Mutation itself: one random column's queen jumps to a random new row.</td></tr>
+<tr><td><code>population.sort(key=fitness, reverse=True)</code></td><td>Sort boards best-first so the elite and the current best are easy to grab.</td></tr>
+<tr><td><code>if fitness(best) == MAX_FITNESS: break</code></td><td>Termination test: perfect board found → stop evolving.</td></tr>
+<tr><td><code>new_pop = population[:10]</code></td><td><b>Elitism</b>: carry the 10 best boards unchanged into the next generation so good genes never get lost.</td></tr>
+<tr><td><code>crossover(selection(...), selection(...))</code></td><td>Pick two parents via tournaments, breed them into one child.</td></tr>
+<tr><td><code>new_pop.append(mutate(child))</code></td><td>Possibly mutate the child, then add it to the next generation.</td></tr>
+<tr><td><code>generation += 1</code></td><td>Count generations so we can report how long evolution took.</td></tr>
+<tr><td><code>print(...)</code></td><td>Report the winning generation number, the solution chromosome and its (perfect) fitness.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Solution found in generation 95
+Chromosome: [7, 1, 3, 8, 6, 4, 2, 5] Fitness: 28</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Note: GA is random — your generation count and chromosome will differ each run, but Fitness must reach 28.</p>
+
+
+
+
+<h3 id="w10-tsp">Lab Task 10.2 — TSP for Pakistani Cities with GA</h3>
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Bykea Rider's Route</span>
+<p>A Bykea delivery rider in Lahore must deliver parcels to Okara, Sahiwal, Multan, Faisalabad and Islamabad, and return home. Which <b>order of cities</b> gives the shortest total ride? With <i>n</i> cities there are (n−1)!/2 routes — brute force explodes fast. GA evolves good routes instead.</p></div>
+
+<h3>Animation 2 — GA Evolving a TSP Route</h3>
+<div class="animbox">
+<canvas id="cvTSP" width="760" height="400"></canvas>
+<div class="controls">
+<button onclick="tStart()">▶ Evolve Route</button>
+<button class="alt" onclick="tReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> Six Pakistani cities plotted as dots. The blue line is the <b>best route</b> found so far; the label shows its total distance. Each generation, order-crossover and swap-mutation try new city orders. Watch the messy zig-zag route straighten into a short, sensible loop.</div>
+</div>
+
+<div class="codecard" id="cc2"><div class="tabbar"><button class="tab on" onclick="ccTab(2,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(2,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(2)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(2)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># TSP for Pakistani cities using a Genetic Algorithm</span>
+<span class="k">import</span> random, math
+
+cities = {
+    <span class="s">"Lahore"</span>: (74.3, 31.5),  <span class="s">"Okara"</span>: (73.4, 30.8),
+    <span class="s">"Sahiwal"</span>: (73.1, 30.7), <span class="s">"Multan"</span>: (71.5, 30.2),
+    <span class="s">"Faisalabad"</span>: (73.1, 31.4), <span class="s">"Islamabad"</span>: (73.0, 33.7)
+}
+names = list(cities.keys())
+
+<span class="k">def</span> <span class="f">distance</span>(a, b):
+    (x1, y1), (x2, y2) = cities[a], cities[b]
+    <span class="k">return</span> math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+
+<span class="k">def</span> <span class="f">route_length</span>(route):
+    total = 0
+    <span class="k">for</span> i <span class="k">in</span> range(len(route)):
+        total += distance(route[i], route[(i + 1) % len(route)])
+    <span class="k">return</span> total
+
+<span class="k">def</span> <span class="f">order_crossover</span>(p1, p2):
+    a, b = sorted(random.sample(range(len(p1)), 2))
+    child = [<span class="k">None</span>] * len(p1)
+    child[a:b] = p1[a:b]
+    fill = [c <span class="k">for</span> c <span class="k">in</span> p2 <span class="k">if</span> c <span class="k">not</span> <span class="k">in</span> child]
+    idx = 0
+    <span class="k">for</span> i <span class="k">in</span> range(len(child)):
+        <span class="k">if</span> child[i] <span class="k">is</span> <span class="k">None</span>:
+            child[i] = fill[idx]; idx += 1
+    <span class="k">return</span> child
+
+<span class="k">def</span> <span class="f">swap_mutation</span>(route):
+    <span class="k">if</span> random.random() &lt; 0.2:
+        i, j = random.sample(range(len(route)), 2)
+        route[i], route[j] = route[j], route[i]
+    <span class="k">return</span> route
+
+pop = [random.sample(names, len(names)) <span class="k">for</span> _ <span class="k">in</span> range(80)]
+<span class="k">for</span> gen <span class="k">in</span> range(300):
+    pop.sort(key=route_length)
+    new_pop = pop[:8]
+    <span class="k">while</span> len(new_pop) &lt; 80:
+        p1, p2 = random.sample(pop[:30], 2)
+        new_pop.append(swap_mutation(order_crossover(p1, p2)))
+    pop = new_pop
+
+best = min(pop, key=route_length)
+print(<span class="s">"Best route:"</span>, <span class="s">" → "</span>.join(best))
+print(<span class="s">"Length:"</span>, round(route_length(best), 3))</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>import random, math</code></td><td>random for GA operators; math for the square-root in distance calculation.</td></tr>
+<tr><td><code>cities = {...}</code></td><td>Dictionary mapping each city name to its (longitude, latitude) coordinates.</td></tr>
+<tr><td><code>names = list(cities.keys())</code></td><td>Extracts just the city names into a list — a chromosome is a <b>permutation</b> of this list.</td></tr>
+<tr><td><code>def distance(a, b):</code></td><td>Straight-line (Euclidean) distance between two cities using the distance formula √((x₁−x₂)²+(y₁−y₂)²).</td></tr>
+<tr><td><code>(x1,y1),(x2,y2) = cities[a], cities[b]</code></td><td>Tuple unpacking: pulls both coordinate pairs out of the dictionary in one line.</td></tr>
+<tr><td><code>route[(i + 1) % len(route)]</code></td><td>The <code>%</code> wraps around: after the last city, the rider returns to the first city — it's a round trip.</td></tr>
+<tr><td><code>order_crossover(p1, p2)</code></td><td>Normal crossover would duplicate cities! Order Crossover (OX) keeps a slice of parent 1 and fills the rest in parent 2's order — every city appears exactly once.</td></tr>
+<tr><td><code>a, b = sorted(random.sample(...))</code></td><td>Picks two random cut positions and sorts them so a &lt; b — this defines the slice to copy.</td></tr>
+<tr><td><code>child[a:b] = p1[a:b]</code></td><td>Copies the chosen slice from parent 1 directly into the child.</td></tr>
+<tr><td><code>fill = [c for c in p2 if c not in child]</code></td><td>Collects the cities still missing, in the order they appear in parent 2.</td></tr>
+<tr><td><code>if child[i] is None: child[i]=fill[idx]</code></td><td>Walks the child left-to-right filling empty slots with the missing cities.</td></tr>
+<tr><td><code>swap_mutation(route)</code></td><td>With 20% probability, swaps two random cities in the route — small change, valid permutation preserved.</td></tr>
+<tr><td><code>route[i],route[j] = route[j],route[i]</code></td><td>Pythonic swap — exchanges two cities' positions without a temporary variable.</td></tr>
+<tr><td><code>random.sample(names, len(names))</code></td><td>Creates one random full shuffle of all city names — one random initial route.</td></tr>
+<tr><td><code>pop.sort(key=route_length)</code></td><td>Shortest routes first — note we now <b>minimise</b> length (opposite of 8-queens fitness).</td></tr>
+<tr><td><code>p1, p2 = random.sample(pop[:30], 2)</code></td><td>Parents are picked from the top 30 routes — selection pressure towards good routes.</td></tr>
+<tr><td><code>min(pop, key=route_length)</code></td><td>After 300 generations, take the single shortest route in the final population.</td></tr>
+<tr><td><code>" → ".join(best)</code></td><td>Joins city names with arrows for pretty printing, e.g. Lahore → Okara → Sahiwal…</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Best route: Multan → Sahiwal → Okara → Lahore → Islamabad → Faisalabad
+Length: 9.99</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Note: the route may print in reverse or start from a different city — a loop has no fixed start. Length ≈ 9.99 is the optimum.</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 10</span>
+<ol>
+<li>Change the mutation rate to 0.5 and 0.01. Record the average generation count over 5 runs for each. What do you observe?</li>
+<li>Extend the 8-Queens code to <b>N-Queens</b> (take N as input). Test with N = 10 and N = 12.</li>
+<li>Add Karachi (67.0, 24.8) and Peshawar (71.5, 34.0) to the TSP and re-run. Does the best route still make geographic sense?</li>
+</ol></div>
+</section>
+<!-- ================= WEEK 11 ================= -->
+<section class="week" id="w11">
+<h2 class="wtitle">Week 11 — Knowledge Representation (KR)</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Compare logic-based, procedural, structural (frames) and network (semantic net) representations.</li>
+<li>Implement <b>frames with inheritance</b> in Python.</li>
+<li>Build a small <b>semantic network</b> and query it.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — NADRA Record vs. Rishta Aunty</span>
+<p>Your <b>NADRA record</b> is a <b>frame</b>: fixed slots (Name, CNIC, Father's Name, Address) with fillers. A <b>rishta aunty's mental map</b> is a <b>semantic network</b>: "Ahmed — <i>son-of</i> → Malik Sahib — <i>owns</i> → plaza — <i>located-in</i> → Model Town." Same knowledge, different representations, different questions each answers easily.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definition</span>
+<p><b>Knowledge Representation</b> is how an AI stores facts about the world so it can <b>reason</b> with them. Four main styles:</p>
+<ul>
+<li><b>Logic-based:</b> facts and rules in formal logic, e.g. <code>∀x Teacher(x) → Educated(x)</code>.</li>
+<li><b>Procedural:</b> knowledge as code — "how to do" (e.g. a function that computes zakat).</li>
+<li><b>Structural (Frames):</b> objects with slots and default values, supporting inheritance.</li>
+<li><b>Network (Semantic Nets):</b> nodes = concepts, edges = relations (is-a, has-part).</li>
+</ul></div>
+
+<div class="block realworld"><span class="tag">🌍 Real-World Implication</span>
+<p>Google's Knowledge Graph (a giant semantic network) powers the info boxes you see when searching "Allama Iqbal". Hospital expert systems use frames for patient records; Prolog-based legal systems use logic representation.</p>
+</div>
+
+<h3>Animation — Semantic Network with Inheritance</h3>
+<div class="animbox">
+<canvas id="cvSem" width="760" height="400"></canvas>
+<div class="controls">
+<button onclick="sQuery()">▶ Query: "Can Mithoo fly?"</button>
+<button class="alt" onclick="sReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> A semantic network: Mithoo <i>is-a</i> Parrot <i>is-a</i> Bird <i>is-a</i> Animal. When you click Query, a pulse travels <b>up the is-a links</b> until it finds a node holding the property <code>can_fly = True</code> (Bird). This upward search is <b>inheritance</b> — Mithoo never stored "can fly" itself, yet the answer is Yes.</p></div>
+</div>
+
+<h3 id="w11-lab">Lab Task 11.1 — Frames with Inheritance in Python</h3>
+<div class="codecard" id="cc3"><div class="tabbar"><button class="tab on" onclick="ccTab(3,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(3,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(3)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(3)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Frame system with slot inheritance</span>
+<span class="k">class</span> <span class="f">Frame</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, name, parent=<span class="k">None</span>):
+        self.name = name
+        self.parent = parent
+        self.slots = {}
+
+    <span class="k">def</span> <span class="f">set_slot</span>(self, slot, value):
+        self.slots[slot] = value
+
+    <span class="k">def</span> <span class="f">get_slot</span>(self, slot):
+        <span class="k">if</span> slot <span class="k">in</span> self.slots:          <span class="c"># found locally</span>
+            <span class="k">return</span> self.slots[slot]
+        <span class="k">if</span> self.parent:                  <span class="c"># climb the is-a chain</span>
+            <span class="k">return</span> self.parent.get_slot(slot)
+        <span class="k">return</span> <span class="k">None</span>                      <span class="c"># nowhere in hierarchy</span>
+
+<span class="c"># Build the hierarchy: Animal → Bird → Parrot → Mithoo</span>
+animal = Frame(<span class="s">"Animal"</span>)
+animal.set_slot(<span class="s">"alive"</span>, <span class="k">True</span>)
+animal.set_slot(<span class="s">"can_fly"</span>, <span class="k">False</span>)
+
+bird = Frame(<span class="s">"Bird"</span>, parent=animal)
+bird.set_slot(<span class="s">"can_fly"</span>, <span class="k">True</span>)          <span class="c"># overrides Animal's default</span>
+bird.set_slot(<span class="s">"has_feathers"</span>, <span class="k">True</span>)
+
+parrot = Frame(<span class="s">"Parrot"</span>, parent=bird)
+parrot.set_slot(<span class="s">"colour"</span>, <span class="s">"green"</span>)
+
+mithoo = Frame(<span class="s">"Mithoo"</span>, parent=parrot)
+mithoo.set_slot(<span class="s">"owner"</span>, <span class="s">"Nani Amma"</span>)
+
+print(<span class="s">"Can Mithoo fly?"</span>, mithoo.get_slot(<span class="s">"can_fly"</span>))     <span class="c"># True (from Bird)</span>
+print(<span class="s">"Mithoo's colour:"</span>, mithoo.get_slot(<span class="s">"colour"</span>))     <span class="c"># green (from Parrot)</span>
+print(<span class="s">"Is Mithoo alive?"</span>, mithoo.get_slot(<span class="s">"alive"</span>))      <span class="c"># True (from Animal)</span></pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>class Frame:</code></td><td>Defines a Frame type — every frame will be an object of this class.</td></tr>
+<tr><td><code>def __init__(self, name, parent=None):</code></td><td>Constructor runs when a frame is created. <code>parent=None</code> means a frame may have no parent (like Animal, the root).</td></tr>
+<tr><td><code>self.slots = {}</code></td><td>Each frame gets its own empty dictionary of slot→value pairs (its personal record card).</td></tr>
+<tr><td><code>set_slot(self, slot, value)</code></td><td>Writes a value into a slot, e.g. <code>can_fly = True</code>.</td></tr>
+<tr><td><code>if slot in self.slots:</code></td><td>Lookup step 1: does <b>this</b> frame store the slot directly? Local values win.</td></tr>
+<tr><td><code>return self.parent.get_slot(slot)</code></td><td>Lookup step 2: <b>recursion</b> — ask the parent frame, who asks its parent… this <b>is</b> inheritance.</td></tr>
+<tr><td><code>return None</code></td><td>Lookup step 3: reached the root and still not found — the property is unknown.</td></tr>
+<tr><td><code>animal.set_slot("can_fly", False)</code></td><td>Default at the top: most animals cannot fly.</td></tr>
+<tr><td><code>bird.set_slot("can_fly", True)</code></td><td><b>Override</b>: Bird replaces the inherited default — birds fly. Closest ancestor wins.</td></tr>
+<tr><td><code>mithoo = Frame("Mithoo", parent=parrot)</code></td><td>An <b>instance</b> frame: a specific parrot, linked into the hierarchy through Parrot.</td></tr>
+<tr><td><code>mithoo.get_slot("can_fly")</code></td><td>Mithoo → not found → Parrot → not found → <b>Bird → True</b>. Two hops up the chain.</td></tr>
+<tr><td><code>mithoo.get_slot("alive")</code></td><td>Climbs all the way to Animal (3 hops) — deepest inheritance in this demo.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Can Mithoo fly? True
+Mithoo's colour: green
+Is Mithoo alive? True</pre>
+
+
+
+
+<h3>Lab Task 11.2 — Semantic Network as a Python Dictionary</h3>
+<div class="codecard" id="cc4"><div class="tabbar"><button class="tab on" onclick="ccTab(4,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(4,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(4)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(4)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Tiny semantic network + path query</span>
+network = {
+    (<span class="s">"Mithoo"</span>, <span class="s">"is_a"</span>): <span class="s">"Parrot"</span>,
+    (<span class="s">"Parrot"</span>, <span class="s">"is_a"</span>): <span class="s">"Bird"</span>,
+    (<span class="s">"Bird"</span>,   <span class="s">"is_a"</span>): <span class="s">"Animal"</span>,
+    (<span class="s">"Bird"</span>,   <span class="s">"can"</span>):  <span class="s">"fly"</span>,
+    (<span class="s">"Animal"</span>, <span class="s">"needs"</span>): <span class="s">"food"</span>,
+}
+
+<span class="k">def</span> <span class="f">query</span>(entity, relation):
+    current = entity
+    <span class="k">while</span> current:
+        <span class="k">if</span> (current, relation) <span class="k">in</span> network:
+            <span class="k">return</span> current, network[(current, relation)]
+        current = network.get((current, <span class="s">"is_a"</span>))   <span class="c"># climb is-a link</span>
+    <span class="k">return</span> <span class="k">None</span>, <span class="k">None</span>
+
+who, what = query(<span class="s">"Mithoo"</span>, <span class="s">"can"</span>)
+print(<span class="s">f"Mithoo can {what} (inherited from {who})"</span>)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>network = { (node, relation): target }</code></td><td>Stores each edge of the network as a dictionary entry: key = (from-node, relation), value = to-node.</td></tr>
+<tr><td><code>while current:</code></td><td>Keep climbing as long as we have a node to stand on; becomes None past the root, ending the loop.</td></tr>
+<tr><td><code>if (current, relation) in network:</code></td><td>Does the current node directly hold this relation? If yes, answer found.</td></tr>
+<tr><td><code>network.get((current, "is_a"))</code></td><td>Move one step up the taxonomy. <code>.get</code> returns None safely if there is no parent.</td></tr>
+<tr><td><code>f"Mithoo can {what} ..."</code></td><td>f-string prints the inherited answer and which ancestor provided it.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Mithoo can fly (inherited from Bird)</pre>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 11</span>
+<ol>
+<li>Add a frame <b>Penguin</b> (parent = Bird) with <code>can_fly = False</code>, and instance <b>Pingu</b>. Verify the override works.</li>
+<li>Extend the semantic network with "Fish is_a Animal", "Fish can swim", "Rohu is_a Fish". Query what Rohu can do.</li>
+<li>Write a paragraph: which representation would you use for (a) FBR tax rules, (b) a student record system, (c) Urdu word relationships? Justify.</li>
+</ol></div>
+</section>
+
+<!-- ================= WEEK 12 ================= -->
+<section class="week" id="w12">
+<h2 class="wtitle">Week 12 — Propositional Logic & Wumpus World</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Understand syntax, connectives, semantics, models and truth tables.</li>
+<li>Generate truth tables in Python and test <b>validity / entailment</b> by model checking.</li>
+<li>Apply inference rules (Modus Ponens, resolution idea) to Wumpus World percepts.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Load-shedding Logic</span>
+<p>Let <b>P</b> = "WAPDA cut the power" and <b>Q</b> = "the UPS is running". Your household rule: <b>P → Q</b> ("if power cut, then UPS runs"). You hear the UPS beep (Q is true) — careful! You <b>cannot</b> conclude P (maybe someone is testing the UPS). But if you see the lights of the whole mohalla off (P true), rule P → Q lets you conclude Q by <b>Modus Ponens</b>. Logic tells us which conclusions are safe.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definition</span>
+<p><b>Propositional logic</b> uses atomic sentences (P, Q, R…) and connectives: <b>¬</b> (not), <b>∧</b> (and), <b>∨</b> (or), <b>→</b> (implies), <b>↔</b> (iff). A <b>model</b> is one assignment of True/False to all symbols. KB <b>entails</b> α (KB ⊨ α) when α is true in <b>every</b> model where KB is true.</p>
+</div>
+
+<table class="tt">
+<tr><th>P</th><th>Q</th><th>¬P</th><th>P∧Q</th><th>P∨Q</th><th>P→Q</th><th>P↔Q</th></tr>
+<tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>T</td><td>F</td><td>F</td><td>F</td><td>T</td><td><b style="color:#c5221f">F</b></td><td>F</td></tr>
+<tr><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td></tr>
+<tr><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+</table>
+<p style="text-align:center;color:var(--muted);font-size:13.5px">Remember: P→Q is false <b>only</b> when P is true and Q is false.</p>
+
+<h3>Animation — Wumpus World Inference</h3>
+<div class="animbox">
+<canvas id="cvWumpus" width="640" height="430"></canvas>
+<div class="controls">
+<button onclick="wStep()">▶ Next Inference Step</button>
+<button class="alt" onclick="wReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> A 4×4 cave. The agent starts at [1,1]. Step through: it feels <b>no breeze at [1,1]</b> → neighbours [1,2] and [2,1] are pit-free (safe, green). Moving to [2,1] it feels a <b>breeze</b> → a pit is in [2,2] or [3,1] (marked P?). From [1,2] it smells a <b>stench</b> → Wumpus narrowed down. Each step shows the logical sentence used — pure propositional reasoning, no luck involved.</div>
+</div>
+
+<h3 id="w12-lab">Lab Task 12.1 — Truth Table Generator & Entailment Checker</h3>
+<div class="codecard" id="cc5"><div class="tabbar"><button class="tab on" onclick="ccTab(5,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(5,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(5)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(5)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Truth table generator + entailment by model checking</span>
+<span class="k">import</span> itertools
+
+<span class="k">def</span> <span class="f">implies</span>(p, q):
+    <span class="k">return</span> (<span class="k">not</span> p) <span class="k">or</span> q          <span class="c"># definition of P → Q</span>
+
+symbols = [<span class="s">"P"</span>, <span class="s">"Q"</span>, <span class="s">"R"</span>]
+
+<span class="c"># KB:  (P → Q)  AND  (Q → R)      Query: P → R   (chain rule test)</span>
+<span class="k">def</span> <span class="f">KB</span>(m):
+    <span class="k">return</span> implies(m[<span class="s">"P"</span>], m[<span class="s">"Q"</span>]) <span class="k">and</span> implies(m[<span class="s">"Q"</span>], m[<span class="s">"R"</span>])
+
+<span class="k">def</span> <span class="f">query</span>(m):
+    <span class="k">return</span> implies(m[<span class="s">"P"</span>], m[<span class="s">"R"</span>])
+
+print(<span class="s">f"{'P':&gt;6}{'Q':&gt;6}{'R':&gt;6}{'KB':&gt;6}{'P→R':&gt;6}"</span>)
+entails = <span class="k">True</span>
+<span class="k">for</span> values <span class="k">in</span> itertools.product([<span class="k">True</span>, <span class="k">False</span>], repeat=3):
+    m = dict(zip(symbols, values))         <span class="c"># one model</span>
+    kb, q = KB(m), query(m)
+    print(<span class="s">f"{str(m['P']):&gt;6}{str(m['Q']):&gt;6}{str(m['R']):&gt;6}{str(kb):&gt;6}{str(q):&gt;6}"</span>)
+    <span class="k">if</span> kb <span class="k">and</span> <span class="k">not</span> q:                      <span class="c"># counter-model found</span>
+        entails = <span class="k">False</span>
+
+print(<span class="s">"KB entails P→R :"</span>, entails)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>import itertools</code></td><td>Gives us <code>product</code>, the tool that generates every combination of True/False.</td></tr>
+<tr><td><code>def implies(p, q): return (not p) or q</code></td><td>Encodes the truth table of →: false only when p is True and q is False. This single line <b>is</b> material implication.</td></tr>
+<tr><td><code>symbols = ["P","Q","R"]</code></td><td>The proposition symbols of our language — 3 symbols means 2³ = 8 models.</td></tr>
+<tr><td><code>def KB(m):</code></td><td>The knowledge base as a Python function: given a model <code>m</code>, is the KB true in it?</td></tr>
+<tr><td><code>itertools.product([True,False], repeat=3)</code></td><td>Generates all 8 truth assignments: (T,T,T), (T,T,F), … (F,F,F). Each tuple is one <b>model</b>.</td></tr>
+<tr><td><code>m = dict(zip(symbols, values))</code></td><td><code>zip</code> pairs names with values; <code>dict</code> makes a model like {"P":True,"Q":False,"R":True}.</td></tr>
+<tr><td><code>if kb and not q: entails = False</code></td><td>The heart of <b>model checking</b>: entailment fails only if some model makes KB true but the query false. If no such counter-model exists in all 8 rows, KB ⊨ query.</td></tr>
+<tr><td><code>f"{'P':&gt;6}..."</code></td><td>Formatted printing: <code>&gt;6</code> right-aligns each column in 6 spaces for a neat table.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">     P     Q     R    KB   P→R
+  True  True  True  True  True
+  True  True False False False
+  True False  True False  True
+  True False False False False
+ False  True  True  True  True
+ False  True False False  True
+ False False  True  True  True
+ False False False  True  True
+KB entails P→R : True</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Read the table: in every row where KB is True, P→R is also True — no counter-model exists, so entailment holds.</p>
+
+
+
+
+<h3>Lab Task 12.2 — Wumpus World Safe-Cell Reasoner</h3>
+<div class="codecard" id="cc6"><div class="tabbar"><button class="tab on" onclick="ccTab(6,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(6,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(6)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(6)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Mini Wumpus reasoner: deduce safe cells from breeze percepts</span>
+GRID = 4
+
+<span class="k">def</span> <span class="f">neighbours</span>(x, y):
+    cells = [(x+1,y), (x-1,y), (x,y+1), (x,y-1)]
+    <span class="k">return</span> [(a,b) <span class="k">for</span> (a,b) <span class="k">in</span> cells <span class="k">if</span> 1 &lt;= a &lt;= GRID <span class="k">and</span> 1 &lt;= b &lt;= GRID]
+
+<span class="c"># percepts[(x,y)] = True means breeze felt at (x,y)</span>
+percepts = {(1,1): <span class="k">False</span>, (2,1): <span class="k">True</span>, (1,2): <span class="k">False</span>}
+
+safe, maybe_pit = set(), set()
+<span class="k">for</span> (cell, breeze) <span class="k">in</span> percepts.items():
+    safe.add(cell)                          <span class="c"># we stood here and survived</span>
+    <span class="k">if</span> <span class="k">not</span> breeze:
+        <span class="k">for</span> n <span class="k">in</span> neighbours(*cell):
+            safe.add(n)                     <span class="c"># Rule: ¬Breeze ⇒ neighbours pit-free</span>
+    <span class="k">else</span>:
+        <span class="k">for</span> n <span class="k">in</span> neighbours(*cell):
+            <span class="k">if</span> n <span class="k">not</span> <span class="k">in</span> safe:
+                maybe_pit.add(n)            <span class="c"># Rule: Breeze ⇒ pit in SOME neighbour</span>
+
+maybe_pit -= safe                           <span class="c"># resolution: proven-safe cells can't be pits</span>
+print(<span class="s">"SAFE cells      :"</span>, sorted(safe))
+print(<span class="s">"POSSIBLE pits   :"</span>, sorted(maybe_pit))</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>neighbours(x, y)</code></td><td>Returns the up/down/left/right cells, filtered to stay inside the 4×4 cave (list comprehension with a boundary condition).</td></tr>
+<tr><td><code>percepts = {...}</code></td><td>What the agent has sensed so far: no breeze at [1,1] and [1,2], breeze at [2,1].</td></tr>
+<tr><td><code>if not breeze: safe.add(n)</code></td><td>Implements the axiom <code>¬B(x,y) → ¬Pit(all neighbours)</code> — the exact rule from lecture applied as code.</td></tr>
+<tr><td><code>else: maybe_pit.add(n)</code></td><td>Breeze means <code>Pit(n₁) ∨ Pit(n₂) ∨ …</code> — a disjunction: suspects, not certainties.</td></tr>
+<tr><td><code>maybe_pit -= safe</code></td><td>Set subtraction acts like <b>unit resolution</b>: if [1,2] is proven safe, remove it from the disjunction of suspects, narrowing where the pit can be.</td></tr>
+<tr><td><code>neighbours(*cell)</code></td><td>The <code>*</code> unpacks the tuple (x,y) into two separate arguments.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">SAFE cells      : [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2)]
+POSSIBLE pits   : [(3, 1)]</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">The breeze at [2,1] suggested pits at [2,2] and [3,1] — but [2,2] was proven safe by [1,2]'s ¬breeze, so the pit is pinned to [3,1].</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 12</span>
+<ol>
+<li>Use the truth-table code to test whether <code>(P∨Q) ∧ ¬P</code> entails <code>Q</code> (disjunctive syllogism).</li>
+<li>Show with the code that <code>Q</code> does NOT entail <code>P</code> under rule <code>P→Q</code> (the UPS mistake!). Print the counter-model.</li>
+<li>Add stench percepts to the Wumpus reasoner and deduce possible Wumpus cells the same way.</li>
+</ol></div>
+</section>
+<!-- ================= WEEK 13 ================= -->
+<section class="week" id="w13">
+<h2 class="wtitle">Week 13 — First-Order Logic, Skolemization & Unification</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>See why propositional logic is too weak, and write FOL with predicates & quantifiers.</li>
+<li>Implement <b>substitution</b> and the <b>unification algorithm</b> in Python.</li>
+<li>Solve the classic Man–Wolf–Goat–Cabbage river puzzle by state-space search.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — One Rule for the Whole Class</span>
+<p>In propositional logic you would need a separate sentence for every student: "AliPassed", "SaraPassed", "UsmanPassed"… 60 sentences per class! FOL gives you <b>one</b> sentence: <code>∀x Student(x) ∧ Marks(x) ≥ 50 → Passed(x)</code>. Quantifiers are like a principal's notice on the board — one announcement, applies to everyone.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definitions</span>
+<ul>
+<li><b>Predicate:</b> a property or relation, e.g. <code>Teacher(tahir)</code>, <code>Loves(ali, biryani)</code>.</li>
+<li><b>∀ Universal quantifier:</b> "for all". <b>∃ Existential:</b> "there exists".</li>
+<li><b>Skolemization:</b> removing ∃ by replacing its variable with a new <b>constant</b> (no enclosing ∀) or a <b>Skolem function</b> of the enclosing ∀-variables. E.g. ∀x ∃y Mother(y,x) → ∀x Mother(<b>M(x)</b>, x).</li>
+<li><b>Substitution:</b> a binding set like θ = {x/ali, y/biryani}.</li>
+<li><b>Unification:</b> finding the Most General Unifier (MGU) θ that makes two expressions identical.</li>
+</ul></div>
+
+<h3>Animation — Unification Step by Step</h3>
+<div class="animbox">
+<canvas id="cvUnify" width="760" height="330"></canvas>
+<div class="controls">
+<button onclick="uStep()">▶ Next Unification Step</button>
+<button class="alt" onclick="uReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> We unify <code>Knows(ali, x)</code> with <code>Knows(y, mother(y))</code>. Step 1: predicates match. Step 2: <code>ali</code> vs <code>y</code> → bind <b>y/ali</b>. Step 3: <code>x</code> vs <code>mother(y)</code>, apply existing binding → <code>mother(ali)</code>, bind <b>x/mother(ali)</b>. The substitution set θ grows on the right until both expressions become identical (shown in green).</div>
+</div>
+
+<h3 id="w13-lab">Lab Task 13.1 — Unification Algorithm in Python</h3>
+<div class="codecard" id="cc7"><div class="tabbar"><button class="tab on" onclick="ccTab(7,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(7,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(7)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(7)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Unification with occurs-check.  Variables are lowercase single letters.</span>
+<span class="k">def</span> <span class="f">is_variable</span>(t):
+    <span class="k">return</span> isinstance(t, str) <span class="k">and</span> len(t) == 1 <span class="k">and</span> t.islower()
+
+<span class="k">def</span> <span class="f">substitute</span>(t, theta):
+    <span class="k">if</span> is_variable(t) <span class="k">and</span> t <span class="k">in</span> theta:
+        <span class="k">return</span> substitute(theta[t], theta)     <span class="c"># follow the chain</span>
+    <span class="k">if</span> isinstance(t, tuple):                    <span class="c"># compound: (functor, arg1, ...)</span>
+        <span class="k">return</span> (t[0],) + tuple(substitute(a, theta) <span class="k">for</span> a <span class="k">in</span> t[1:])
+    <span class="k">return</span> t
+
+<span class="k">def</span> <span class="f">occurs</span>(v, t, theta):
+    t = substitute(t, theta)
+    <span class="k">if</span> v == t: <span class="k">return</span> <span class="k">True</span>
+    <span class="k">if</span> isinstance(t, tuple):
+        <span class="k">return</span> any(occurs(v, a, theta) <span class="k">for</span> a <span class="k">in</span> t[1:])
+    <span class="k">return</span> <span class="k">False</span>
+
+<span class="k">def</span> <span class="f">unify</span>(a, b, theta):
+    <span class="k">if</span> theta <span class="k">is</span> <span class="k">None</span>: <span class="k">return</span> <span class="k">None</span>          <span class="c"># failure propagates</span>
+    a, b = substitute(a, theta), substitute(b, theta)
+    <span class="k">if</span> a == b: <span class="k">return</span> theta
+    <span class="k">if</span> is_variable(a):
+        <span class="k">if</span> occurs(a, b, theta): <span class="k">return</span> <span class="k">None</span>
+        <span class="k">return</span> {**theta, a: b}
+    <span class="k">if</span> is_variable(b):
+        <span class="k">return</span> unify(b, a, theta)
+    <span class="k">if</span> isinstance(a, tuple) <span class="k">and</span> isinstance(b, tuple) <span class="k">and</span> len(a) == len(b) <span class="k">and</span> a[0] == b[0]:
+        <span class="k">for</span> ai, bi <span class="k">in</span> zip(a[1:], b[1:]):
+            theta = unify(ai, bi, theta)
+        <span class="k">return</span> theta
+    <span class="k">return</span> <span class="k">None</span>                              <span class="c"># mismatch</span>
+
+<span class="c"># Knows(ali, x)   vs   Knows(y, mother(y))</span>
+e1 = (<span class="s">"Knows"</span>, <span class="s">"ali"</span>, <span class="s">"x"</span>)
+e2 = (<span class="s">"Knows"</span>, <span class="s">"y"</span>, (<span class="s">"mother"</span>, <span class="s">"y"</span>))
+theta = unify(e1, e2, {})
+print(<span class="s">"MGU:"</span>, theta)
+print(<span class="s">"Unified:"</span>, substitute(e1, theta))</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>is_variable(t)</code></td><td>Our convention: a single lowercase letter like <code>x</code>, <code>y</code> is a variable; <code>ali</code> is a constant; a tuple is a function/predicate.</td></tr>
+<tr><td><code>substitute(theta[t], theta)</code></td><td>Applies bindings recursively: if x/y and y/ali, then x ultimately becomes ali (following the chain).</td></tr>
+<tr><td><code>(t[0],) + tuple(substitute(a,...))</code></td><td>For compound terms, keep the functor (element 0), substitute inside every argument.</td></tr>
+<tr><td><code>occurs(v, t, theta)</code></td><td><b>Occurs-check:</b> forbids binding x to f(x) — that would create an infinite term. Standard safety in Robinson's algorithm.</td></tr>
+<tr><td><code>if theta is None: return None</code></td><td>Once any sub-unification fails, the whole unification fails — failure flows upward.</td></tr>
+<tr><td><code>if a == b: return theta</code></td><td>Already identical after substitution — nothing to do (e.g. constant vs same constant).</td></tr>
+<tr><td><code>return {**theta, a: b}</code></td><td>Variable case: add the new binding a/b to θ. <code>{**theta, ...}</code> copies the dict and extends it.</td></tr>
+<tr><td><code>return unify(b, a, theta)</code></td><td>If only b is a variable, flip the arguments and reuse the variable case — no duplicate code.</td></tr>
+<tr><td><code>a[0] == b[0] and len(a)==len(b)</code></td><td>Compound terms unify only if functor names and arities match (Knows/2 with Knows/2).</td></tr>
+<tr><td><code>for ai, bi in zip(...): theta = unify(...)</code></td><td>Unify argument-by-argument, <b>threading θ through</b> so earlier bindings constrain later ones.</td></tr>
+<tr><td><code>theta = unify(e1, e2, {})</code></td><td>Start with the empty substitution. Result: {y: 'ali', x: ('mother','ali')} — the MGU.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">MGU: {'y': 'ali', 'x': ('mother', 'ali')}
+Unified: ('Knows', 'ali', ('mother', 'ali'))</pre>
+
+
+
+
+<h3>Lab Task 13.2 — Man, Wolf, Goat & Cabbage (State-Space Search)</h3>
+<div class="block analogy"><span class="tag">🇵🇰 Analogy</span>
+<p>A farmer at the River Ravi must ferry a wolf, a goat and a cabbage (sabzi!) across. Boat carries the farmer + one item. Alone together: wolf eats goat, goat eats cabbage. FOL constraints define <b>illegal states</b>; BFS finds the plan.</p></div>
+
+<div class="codecard" id="cc8"><div class="tabbar"><button class="tab on" onclick="ccTab(8,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(8,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(8)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(8)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># River crossing puzzle solved with Breadth-First Search</span>
+<span class="k">from</span> collections <span class="k">import</span> deque
+
+items = [<span class="s">"man"</span>, <span class="s">"wolf"</span>, <span class="s">"goat"</span>, <span class="s">"cabbage"</span>]
+<span class="c"># A state = frozenset of items on the LEFT bank</span>
+start = frozenset(items)
+goal  = frozenset()
+
+<span class="k">def</span> <span class="f">unsafe</span>(state):
+    <span class="k">for</span> bank <span class="k">in</span> (state, frozenset(items) - state):
+        <span class="k">if</span> <span class="s">"man"</span> <span class="k">not</span> <span class="k">in</span> bank:
+            <span class="k">if</span> <span class="s">"wolf"</span> <span class="k">in</span> bank <span class="k">and</span> <span class="s">"goat"</span> <span class="k">in</span> bank: <span class="k">return</span> <span class="k">True</span>
+            <span class="k">if</span> <span class="s">"goat"</span> <span class="k">in</span> bank <span class="k">and</span> <span class="s">"cabbage"</span> <span class="k">in</span> bank: <span class="k">return</span> <span class="k">True</span>
+    <span class="k">return</span> <span class="k">False</span>
+
+<span class="k">def</span> <span class="f">moves</span>(state):
+    man_left = <span class="s">"man"</span> <span class="k">in</span> state
+    bank = state <span class="k">if</span> man_left <span class="k">else</span> frozenset(items) - state
+    <span class="k">for</span> cargo <span class="k">in</span> [<span class="k">None</span>] + [i <span class="k">for</span> i <span class="k">in</span> bank <span class="k">if</span> i != <span class="s">"man"</span>]:
+        moving = {<span class="s">"man"</span>} | ({cargo} <span class="k">if</span> cargo <span class="k">else</span> set())
+        new = state - moving <span class="k">if</span> man_left <span class="k">else</span> state | moving
+        <span class="k">if</span> <span class="k">not</span> unsafe(new):
+            <span class="k">yield</span> cargo, frozenset(new)
+
+queue, seen = deque([(start, [])]), {start}
+<span class="k">while</span> queue:
+    state, path = queue.popleft()
+    <span class="k">if</span> state == goal:
+        <span class="k">for</span> step, cargo <span class="k">in</span> enumerate(path, 1):
+            print(<span class="s">f"Step {step}: man crosses with {cargo or 'nothing'}"</span>)
+        <span class="k">break</span>
+    <span class="k">for</span> cargo, nxt <span class="k">in</span> moves(state):
+        <span class="k">if</span> nxt <span class="k">not</span> <span class="k">in</span> seen:
+            seen.add(nxt)
+            queue.append((nxt, path + [cargo]))</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>from collections import deque</code></td><td>A deque gives O(1) pop-from-front — the queue that makes BFS efficient.</td></tr>
+<tr><td><code>start = frozenset(items)</code></td><td>State = who is on the left bank. Frozensets are hashable, so states can go inside the <code>seen</code> set.</td></tr>
+<tr><td><code>goal = frozenset()</code></td><td>Goal: left bank empty — everyone crossed safely.</td></tr>
+<tr><td><code>for bank in (state, all - state)</code></td><td>Checks <b>both</b> banks: the left bank set and its complement (the right bank).</td></tr>
+<tr><td><code>if "man" not in bank:</code></td><td>Danger only when the farmer is absent — his presence supervises everyone. This encodes the FOL constraint <code>¬Present(man,b) ∧ Wolf∧Goat → Unsafe</code>.</td></tr>
+<tr><td><code>[None] + [i for i in bank ...]</code></td><td>Possible cargo: nothing (None = cross alone) or any item on the man's current bank.</td></tr>
+<tr><td><code>state - moving / state | moving</code></td><td>Set arithmetic moves the passengers: subtract when leaving the left bank, union when returning.</td></tr>
+<tr><td><code>yield cargo, frozenset(new)</code></td><td>Generator produces each legal successor state lazily — memory friendly.</td></tr>
+<tr><td><code>queue.popleft()</code></td><td>BFS: expand oldest state first → the first solution found is the <b>shortest</b> plan (7 crossings).</td></tr>
+<tr><td><code>if nxt not in seen:</code></td><td>Visited check prevents infinite loops (rowing back and forth forever!).</td></tr>
+<tr><td><code>path + [cargo]</code></td><td>Each queue entry carries the full plan so far, so we can print the solution when goal is reached.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Step 1: man crosses with goat
+Step 2: man crosses with nothing
+Step 3: man crosses with wolf
+Step 4: man crosses with goat
+Step 5: man crosses with cabbage
+Step 6: man crosses with nothing
+Step 7: man crosses with goat</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">BFS guarantees this is the shortest plan: 7 crossings. (An equally short mirror solution swaps wolf and cabbage.)</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 13</span>
+<ol>
+<li>Trace by hand, then verify in code: unify <code>P(x, f(x))</code> with <code>P(a, y)</code>. What is θ?</li>
+<li>Try to unify <code>P(x, x)</code> with <code>P(a, b)</code>. Why does it fail? Show the algorithm's path.</li>
+<li>Skolemize on paper: ∀x ∃y Teaches(y, x) and ∃x ∀y Loves(x, y). Which one gets a Skolem <b>function</b> and which a Skolem <b>constant</b>? Why?</li>
+</ol></div>
+</section>
+<!-- ================= WEEK 14 ================= -->
+<section class="week" id="w14">
+<h2 class="wtitle">Week 14 — Neural Networks & the Perceptron (AND / OR)</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Understand supervised vs unsupervised learning and the perceptron model.</li>
+<li>Implement the perceptron learning rule from scratch (no libraries).</li>
+<li>Train it to classify the AND and OR logic gates and watch the decision line move.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Chai-Wala's Decision</span>
+<p>A chai-wala decides whether to set up his stall: input x₁ = "is it not raining?" and x₂ = "is it a working day?". He weighs the inputs (rain matters more!), adds them up, and if the total crosses his <b>threshold</b>, stall lagta hai. If he misjudges (stall on a rainy Sunday, no customers), he <b>adjusts his weights</b> for next time — that adjustment after each mistake is exactly the <b>perceptron learning rule</b>.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definition</span>
+<p>A <b>perceptron</b> computes <code>output = step(w₁x₁ + w₂x₂ + b)</code> where step(z)=1 if z≥0 else 0. <b>Supervised learning:</b> each training example has a known label; the update rule is:</p>
+<p style="text-align:center;font-size:16px"><b>wᵢ ← wᵢ + η·(target − output)·xᵢ &nbsp;&nbsp;&nbsp; b ← b + η·(target − output)</b></p>
+<p>η (eta) is the learning rate. Geometrically, w₁x₁+w₂x₂+b = 0 is a <b>line</b>; the perceptron learns to place this line so it separates 0-outputs from 1-outputs. (That's why single perceptron fails on XOR — no single line separates it.)</p>
+</div>
+
+<div class="block realworld"><span class="tag">🌍 Real-World Implication</span>
+<p>The perceptron (1958) is the ancestor of today's deep networks in ChatGPT, JazzCash fraud detection and Urdu OCR. Everything modern is stacked, differentiable perceptrons.</p>
+</div>
+
+<h3>Animation — Watch the Decision Boundary Learn AND</h3>
+<div class="animbox">
+<canvas id="cvPerc" width="760" height="400"></canvas>
+<div class="controls">
+<button onclick="pTrainStep()">▶ One Training Epoch</button>
+<button onclick="pAuto()">⏩ Auto-Train</button>
+<button class="alt" onclick="pReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> The four AND inputs plotted: (0,0),(0,1),(1,0) as red circles (target 0) and (1,1) as a green square (target 1). The blue line is the current decision boundary w₁x₁+w₂x₂+b=0. Each epoch, misclassified points push/pull the line via the update rule. Training converges when the line cleanly separates the green point from the three red ones — weights shown live on the right.</div>
+</div>
+
+<h3 id="w14-lab">Lab Task 14.1 — Perceptron from Scratch for AND & OR</h3>
+<div class="codecard" id="cc9"><div class="tabbar"><button class="tab on" onclick="ccTab(9,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(9,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(9)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(9)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Perceptron learning AND and OR gates — pure Python, no libraries</span>
+
+<span class="k">def</span> <span class="f">step</span>(z):
+    <span class="k">return</span> 1 <span class="k">if</span> z &gt;= 0 <span class="k">else</span> 0
+
+<span class="k">def</span> <span class="f">train_perceptron</span>(data, eta=0.1, max_epochs=100):
+    w1, w2, b = 0.0, 0.0, 0.0                <span class="c"># start with zero knowledge</span>
+    <span class="k">for</span> epoch <span class="k">in</span> range(max_epochs):
+        errors = 0
+        <span class="k">for</span> (x1, x2), target <span class="k">in</span> data:
+            z = w1 * x1 + w2 * x2 + b        <span class="c"># weighted sum</span>
+            output = step(z)                 <span class="c"># fire or not?</span>
+            error = target - output          <span class="c"># -1, 0 or +1</span>
+            <span class="k">if</span> error != 0:
+                w1 += eta * error * x1       <span class="c"># perceptron learning rule</span>
+                w2 += eta * error * x2
+                b  += eta * error
+                errors += 1
+        print(<span class="s">f"Epoch {epoch+1}: w1={w1:.2f} w2={w2:.2f} b={b:.2f} errors={errors}"</span>)
+        <span class="k">if</span> errors == 0:                      <span class="c"># perfect epoch → converged</span>
+            <span class="k">break</span>
+    <span class="k">return</span> w1, w2, b
+
+AND_data = [((0,0),0), ((0,1),0), ((1,0),0), ((1,1),1)]
+OR_data  = [((0,0),0), ((0,1),1), ((1,0),1), ((1,1),1)]
+
+print(<span class="s">"=== Training AND ==="</span>)
+w1, w2, b = train_perceptron(AND_data)
+
+print(<span class="s">"\n=== Testing AND ==="</span>)
+<span class="k">for</span> (x1, x2), target <span class="k">in</span> AND_data:
+    pred = step(w1*x1 + w2*x2 + b)
+    print(<span class="s">f"{x1} AND {x2} = {pred}  (expected {target})"</span>)
+
+print(<span class="s">"\n=== Training OR ==="</span>)
+train_perceptron(OR_data)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>def step(z): return 1 if z >= 0 else 0</code></td><td>The activation function — a hard threshold. The neuron "fires" (1) only when the weighted sum reaches 0.</td></tr>
+<tr><td><code>w1, w2, b = 0.0, 0.0, 0.0</code></td><td>Initial weights and bias are zero — the perceptron knows nothing yet; all knowledge will come from mistakes.</td></tr>
+<tr><td><code>for epoch in range(max_epochs):</code></td><td>One <b>epoch</b> = one full pass over all 4 training examples. We allow up to 100 passes.</td></tr>
+<tr><td><code>for (x1,x2), target in data:</code></td><td>Loops through each training pair, unpacking the inputs and the correct answer (supervision!).</td></tr>
+<tr><td><code>z = w1*x1 + w2*x2 + b</code></td><td>The neuron's weighted sum — the chai-wala adding up his weighted considerations.</td></tr>
+<tr><td><code>error = target - output</code></td><td>Three cases: 0 = correct (no change), +1 = fired too weakly (raise weights), −1 = fired wrongly (lower weights).</td></tr>
+<tr><td><code>w1 += eta * error * x1</code></td><td>The famous learning rule. Multiplying by x1 means only <b>active</b> inputs get blamed/credited — if x1 was 0, it played no role, so its weight stays.</td></tr>
+<tr><td><code>b += eta * error</code></td><td>Bias updates on every mistake (its "input" is always 1). Bias shifts the decision line away from the origin.</td></tr>
+<tr><td><code>if errors == 0: break</code></td><td>An entire epoch with zero mistakes = the line perfectly separates the classes → training done (Perceptron Convergence Theorem guarantees this for linearly separable data).</td></tr>
+<tr><td><code>AND_data = [((0,0),0), ...]</code></td><td>The complete truth table as (inputs, label) pairs — our whole training set.</td></tr>
+<tr><td><code>pred = step(w1*x1 + w2*x2 + b)</code></td><td>Testing = a forward pass with the frozen, learned weights. No more updates.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">=== Training AND ===
+Epoch 1: w1=0.10 w2=0.10 b=0.00 errors=2
+Epoch 2: w1=0.20 w2=0.10 b=-0.10 errors=3
+Epoch 3: w1=0.20 w2=0.10 b=-0.20 errors=3
+Epoch 4: w1=0.20 w2=0.10 b=-0.20 errors=0
+
+=== Testing AND ===
+0 AND 0 = 0  (expected 0)
+0 AND 1 = 0  (expected 0)
+1 AND 0 = 0  (expected 0)
+1 AND 1 = 1  (expected 1)</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">errors=0 in Epoch 4 means the line w₁x₁+w₂x₂+b=0 now separates (1,1) from the other three points — converged. OR training prints similarly.</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 14</span>
+<ol>
+<li>Train the perceptron on <b>NAND</b> and <b>NOR</b>. How many epochs does each take?</li>
+<li>Try <b>XOR</b>: <code>[((0,0),0),((0,1),1),((1,0),1),((1,1),0)]</code>. Run 100 epochs. Why does it never converge? Sketch the four points and try to draw one separating line.</li>
+<li>Change η to 1.0 and 0.01. Compare epoch counts. Does η change <i>whether</i> it converges, or only <i>how fast</i>?</li>
+</ol></div>
+</section>
+
+<!-- ================= WEEK 15 ================= -->
+<section class="week" id="w15">
+<h2 class="wtitle">Week 15 — Naïve Bayes & K-Nearest Neighbours</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Apply Bayes' theorem with the conditional-independence assumption.</li>
+<li>Implement Naïve Bayes from scratch on the classic Play-Cricket dataset.</li>
+<li>Implement K-NN from scratch and classify a new student.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Ammi's Weather Wisdom & the Mohalla Vote</span>
+<p><b>Naïve Bayes = Ammi's intuition:</b> "Beta, aasman pe kaale baadal hain, hawa chal rahi hai — match cancel ho jaye ga." She combines the probability of each clue given past experience. <b>K-NN = mohalla vote:</b> to guess if a new family will keep a car, look at their K nearest neighbours' houses — majority wins. No learning phase at all: K-NN is a "lazy" learner.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definitions</span>
+<p><b>Bayes' Theorem:</b> P(Class | Features) = P(Features | Class) · P(Class) / P(Features).</p>
+<p><b>Naïve assumption:</b> features are conditionally independent given the class, so
+P(f₁,f₂,…|C) = P(f₁|C)·P(f₂|C)·… — that single assumption makes computation trivial.</p>
+<p><b>K-NN:</b> store all data; to classify a query, compute distances to every point, take the K closest, output the majority class.</p>
+</div>
+
+<h3>Animation — K-NN Voting Live</h3>
+<div class="animbox">
+<canvas id="cvKNN" width="760" height="400"></canvas>
+<div class="controls">
+<button onclick="knnClassify(3)">▶ Classify with K=3</button>
+<button onclick="knnClassify(7)">▶ Classify with K=7</button>
+<button class="alt" onclick="knnReset()">↺ Reset</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> Blue dots = "Pass" students, orange dots = "Fail" students plotted by (study hours, attendance). The black ★ is a new student. Click a K: lines shoot to the K nearest neighbours, a circle encloses them, and the vote count decides the star's colour. Notice how K=3 and K=7 can give <b>different answers</b> — K matters!</div>
+</div>
+
+<h3 id="w15-lab">Lab Task 15.1 — Naïve Bayes: Will the Cricket Match Happen?</h3>
+<div class="codecard" id="cc10"><div class="tabbar"><button class="tab on" onclick="ccTab(10,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(10,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(10)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(10)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># Naive Bayes from scratch — Play-Cricket dataset</span>
+<span class="k">from</span> collections <span class="k">import</span> defaultdict
+
+<span class="c"># (Outlook, Humidity, Windy) -> Play?</span>
+data = [
+    (<span class="s">"Sunny"</span>, <span class="s">"High"</span>,   <span class="s">"No"</span>,  <span class="s">"No"</span>),
+    (<span class="s">"Sunny"</span>, <span class="s">"High"</span>,   <span class="s">"Yes"</span>, <span class="s">"No"</span>),
+    (<span class="s">"Cloudy"</span>,<span class="s">"High"</span>,   <span class="s">"No"</span>,  <span class="s">"Yes"</span>),
+    (<span class="s">"Rainy"</span>, <span class="s">"High"</span>,   <span class="s">"No"</span>,  <span class="s">"Yes"</span>),
+    (<span class="s">"Rainy"</span>, <span class="s">"Normal"</span>, <span class="s">"No"</span>,  <span class="s">"Yes"</span>),
+    (<span class="s">"Rainy"</span>, <span class="s">"Normal"</span>, <span class="s">"Yes"</span>, <span class="s">"No"</span>),
+    (<span class="s">"Cloudy"</span>,<span class="s">"Normal"</span>, <span class="s">"Yes"</span>, <span class="s">"Yes"</span>),
+    (<span class="s">"Sunny"</span>, <span class="s">"Normal"</span>, <span class="s">"No"</span>,  <span class="s">"Yes"</span>),
+    (<span class="s">"Sunny"</span>, <span class="s">"Normal"</span>, <span class="s">"Yes"</span>, <span class="s">"Yes"</span>),
+    (<span class="s">"Rainy"</span>, <span class="s">"High"</span>,   <span class="s">"Yes"</span>, <span class="s">"No"</span>),
+]
+
+class_count = defaultdict(int)
+feat_count  = defaultdict(int)     <span class="c"># key: (feature_index, value, class)</span>
+
+<span class="k">for</span> *features, label <span class="k">in</span> data:
+    class_count[label] += 1
+    <span class="k">for</span> i, v <span class="k">in</span> enumerate(features):
+        feat_count[(i, v, label)] += 1
+
+<span class="k">def</span> <span class="f">predict</span>(sample):
+    total = len(data)
+    scores = {}
+    <span class="k">for</span> c <span class="k">in</span> class_count:
+        prob = class_count[c] / total                <span class="c"># prior P(C)</span>
+        <span class="k">for</span> i, v <span class="k">in</span> enumerate(sample):
+            <span class="c"># Laplace smoothing: add 1 to avoid zero probability</span>
+            prob *= (feat_count[(i, v, c)] + 1) / (class_count[c] + 2)
+        scores[c] = prob
+    <span class="k">for</span> c, p <span class="k">in</span> scores.items():
+        print(<span class="s">f"  Score for {c}: {p:.5f}"</span>)
+    <span class="k">return</span> max(scores, key=scores.get)
+
+test = (<span class="s">"Sunny"</span>, <span class="s">"High"</span>, <span class="s">"No"</span>)
+print(<span class="s">f"New day {test} → Play = {predict(test)}"</span>)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>from collections import defaultdict</code></td><td>A dictionary that auto-creates missing keys with 0 — saves us "if key not in dict" boilerplate.</td></tr>
+<tr><td><code>data = [...]</code></td><td>10 past days: three weather features and the label "did we play?". This is our entire training experience — Ammi's memory.</td></tr>
+<tr><td><code>for *features, label in data:</code></td><td>Star-unpacking: the last element becomes <code>label</code>, everything before it lands in the list <code>features</code>.</td></tr>
+<tr><td><code>class_count[label] += 1</code></td><td>Counts how many Yes days and No days exist — used for the <b>prior</b> P(C).</td></tr>
+<tr><td><code>feat_count[(i, v, label)] += 1</code></td><td>Counts events like "feature 0 was Sunny on a No day" — the raw material for likelihoods P(fᵢ=v | C).</td></tr>
+<tr><td><code>prob = class_count[c] / total</code></td><td>Starts the score with the prior: e.g. P(Yes) = 6/10.</td></tr>
+<tr><td><code>prob *= (count + 1) / (class_count[c] + 2)</code></td><td>Multiplies in each likelihood — the <b>naïve independence</b> step. The +1/+2 is <b>Laplace smoothing</b>: an unseen combination gets a small non-zero probability instead of killing the whole product with 0.</td></tr>
+<tr><td><code>max(scores, key=scores.get)</code></td><td>MAP decision: return the class with the highest posterior score. (We skipped dividing by P(features) — it's the same for both classes, so the winner doesn't change.)</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">  Score for No: 0.04444
+  Score for Yes: 0.05273
+New day ('Sunny', 'High', 'No') → Play = Yes</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Yes wins because P(Yes)·P(Sunny|Yes)·P(High|Yes)·P(No-wind|Yes) &gt; the same product for No. The scores are unnormalised posteriors — only their comparison matters.</p>
+
+
+
+
+<h3>Lab Task 15.2 — K-NN: Will the New Student Pass?</h3>
+<div class="codecard" id="cc11"><div class="tabbar"><button class="tab on" onclick="ccTab(11,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(11,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(11)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(11)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># K-Nearest Neighbours from scratch</span>
+<span class="k">import</span> math
+<span class="k">from</span> collections <span class="k">import</span> Counter
+
+<span class="c"># (study_hours_per_week, attendance_%) -> result</span>
+students = [
+    ((2, 60), <span class="s">"Fail"</span>), ((3, 65), <span class="s">"Fail"</span>), ((4, 55), <span class="s">"Fail"</span>),
+    ((5, 70), <span class="s">"Fail"</span>), ((8, 80), <span class="s">"Pass"</span>), ((9, 85), <span class="s">"Pass"</span>),
+    ((10, 90), <span class="s">"Pass"</span>), ((12, 95), <span class="s">"Pass"</span>), ((7, 88), <span class="s">"Pass"</span>),
+    ((6, 50), <span class="s">"Fail"</span>),
+]
+
+<span class="k">def</span> <span class="f">euclidean</span>(a, b):
+    <span class="k">return</span> math.sqrt(sum((x - y) ** 2 <span class="k">for</span> x, y <span class="k">in</span> zip(a, b)))
+
+<span class="k">def</span> <span class="f">knn_predict</span>(query, k):
+    dists = [(euclidean(query, feats), label) <span class="k">for</span> feats, label <span class="k">in</span> students]
+    dists.sort(key=<span class="k">lambda</span> t: t[0])          <span class="c"># nearest first</span>
+    nearest = dists[:k]
+    print(<span class="s">f"  {k} nearest:"</span>, [(round(d,1), l) <span class="k">for</span> d, l <span class="k">in</span> nearest])
+    votes = Counter(label <span class="k">for</span> _, label <span class="k">in</span> nearest)
+    <span class="k">return</span> votes.most_common(1)[0][0]
+
+new_student = (6, 75)
+print(<span class="s">f"Student {new_student} → {knn_predict(new_student, k=3)}"</span>)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>students = [...]</code></td><td>The whole "training" step of K-NN: just store the data. Lazy learning — no weights, no epochs.</td></tr>
+<tr><td><code>euclidean(a, b)</code></td><td>Straight-line distance in feature space: √Σ(xᵢ−yᵢ)². Written with a generator so it works for any number of features.</td></tr>
+<tr><td><code>dists = [(distance, label) for ...]</code></td><td>Measures the new student against <b>every</b> stored student — K-NN's cost is at prediction time.</td></tr>
+<tr><td><code>dists.sort(key=lambda t: t[0])</code></td><td>Sort pairs by their first element (distance) so the closest neighbours are at the front.</td></tr>
+<tr><td><code>nearest = dists[:k]</code></td><td>Slice off the K closest — the voting committee.</td></tr>
+<tr><td><code>Counter(label for _, label in nearest)</code></td><td>Tallies the votes, e.g. Counter({'Pass': 2, 'Fail': 1}).</td></tr>
+<tr><td><code>votes.most_common(1)[0][0]</code></td><td>Takes the top (class, count) pair and returns just the class name — majority rules.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">  3 nearest: [(5.1, 'Fail'), (5.4, 'Pass'), (10.4, 'Fail')]
+Student (6, 75) → Fail</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">The 3 nearest neighbours vote 2 Fail vs 1 Pass — a borderline student! Exercise 3 asks you to see how K=5 or K=7 changes this verdict.</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 15</span>
+<ol>
+<li>Predict Play for ("Cloudy","Normal","No") and ("Rainy","High","Yes") using the Naïve Bayes code. Verify one by hand calculation.</li>
+<li>Remove Laplace smoothing (use raw counts). Find a test day whose probability collapses to 0 for one class. Explain why smoothing rescues it.</li>
+<li>Classify student (6, 75) with K = 1, 3, 5, 7, 9. Make a small table of the results. Which K seems most trustworthy and why is even-K risky?</li>
+</ol></div>
+</section>
+<!-- ================= WEEK 16 ================= -->
+<section class="week" id="w16">
+<h2 class="wtitle">Week 16 — Clustering with K-Means (Review Week)</h2>
+
+<div class="block objective"><span class="tag">🎯 Lab Objectives</span>
+<ul>
+<li>Understand unsupervised learning and the K-Means loop (Assign → Update → Repeat).</li>
+<li>Implement K-Means from scratch and cluster student marks data.</li>
+<li>Review: connect all Week 10–16 techniques into one map of AI.</li>
+</ul></div>
+
+<div class="block analogy"><span class="tag">🇵🇰 Analogy — Sabzi Mandi Sorting</span>
+<p>Thousands of mangoes arrive at the mandi with <b>no labels</b>. The arhti drops 3 crates roughly around the pile (initial <b>centroids</b>), workers put each mango in its nearest crate (<b>assignment</b>), then each crate is dragged to the middle of its mangoes (<b>update</b>). Repeat until crates stop moving — the mangoes have sorted <i>themselves</i> into small/medium/large. Nobody told the system the categories: that is <b>unsupervised</b> learning.</p>
+</div>
+
+<div class="block definition"><span class="tag">📖 Definition</span>
+<p><b>K-Means</b> partitions n points into K clusters: <b>1)</b> pick K random centroids; <b>2)</b> assign each point to its nearest centroid; <b>3)</b> move each centroid to the mean of its points; <b>4)</b> repeat until assignments stop changing. It minimises within-cluster squared distance. Contrast with Week 15: Naïve Bayes/K-NN had <b>labels</b> (supervised); K-Means discovers structure with <b>no labels</b>.</p>
+</div>
+
+<h3>Animation — K-Means Converging</h3>
+<div class="animbox">
+<canvas id="cvKM" width="760" height="400"></canvas>
+<div class="controls">
+<button onclick="kmStep()">▶ One Iteration (Assign + Update)</button>
+<button onclick="kmAuto()">⏩ Auto-Run</button>
+<button class="alt" onclick="kmReset()">↺ Reset (new random centroids)</button>
+</div>
+<div class="whatsee"><b>What you are seeing:</b> Grey points are unlabeled students (quiz marks vs assignment marks). The three big ✖ marks are centroids. Each iteration: points take the colour of their nearest centroid, then each ✖ slides to the centre of its coloured group (its path is drawn). When the ✖ marks stop moving, K-Means has converged. Press Reset a few times — different random starts can find different clusterings!</div>
+</div>
+
+<h3 id="w16-lab">Lab Task 16.1 — K-Means from Scratch on Student Marks</h3>
+<div class="codecard" id="cc12"><div class="tabbar"><button class="tab on" onclick="ccTab(12,0,this)">💻 Python Code</button><button class="tab" onclick="ccTab(12,1,this)">📖 Line-by-Line Explanation</button><span class="spacer"></span><button class="actbtn copy" onclick="ccCopy(12)">📋 Copy Code</button><button class="actbtn" onclick="ccFull(12)">⛶ Side-by-Side Full Screen</button></div><div class="pane on"><pre class="code"><span class="c"># K-Means clustering from scratch — grouping students by performance</span>
+<span class="k">import</span> random, math
+
+<span class="c"># (quiz_marks, assignment_marks) — no labels!</span>
+points = [(20,25),(22,30),(25,28),(45,50),(48,55),(50,52),
+          (80,85),(82,88),(85,90),(23,27),(47,49),(84,86)]
+
+K = 3
+
+<span class="k">def</span> <span class="f">dist</span>(a, b):
+    <span class="k">return</span> math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+
+<span class="k">def</span> <span class="f">mean_point</span>(cluster):
+    n = len(cluster)
+    <span class="k">return</span> (sum(p[0] <span class="k">for</span> p <span class="k">in</span> cluster)/n,
+            sum(p[1] <span class="k">for</span> p <span class="k">in</span> cluster)/n)
+
+centroids = random.sample(points, K)          <span class="c"># step 1: random start</span>
+
+<span class="k">for</span> iteration <span class="k">in</span> range(100):
+    <span class="c"># Step 2: ASSIGN every point to nearest centroid</span>
+    clusters = [[] <span class="k">for</span> _ <span class="k">in</span> range(K)]
+    <span class="k">for</span> p <span class="k">in</span> points:
+        idx = min(range(K), key=<span class="k">lambda</span> i: dist(p, centroids[i]))
+        clusters[idx].append(p)
+
+    <span class="c"># Step 3: UPDATE each centroid to its cluster mean</span>
+    new_centroids = []
+    <span class="k">for</span> i <span class="k">in</span> range(K):
+        <span class="k">if</span> clusters[i]:
+            new_centroids.append(mean_point(clusters[i]))
+        <span class="k">else</span>:
+            new_centroids.append(random.choice(points))  <span class="c"># rescue empty cluster</span>
+
+    <span class="c"># Step 4: STOP if nothing moved</span>
+    <span class="k">if</span> new_centroids == centroids:
+        print(<span class="s">f"Converged after {iteration} iterations"</span>)
+        <span class="k">break</span>
+    centroids = new_centroids
+
+<span class="k">for</span> i, c <span class="k">in</span> enumerate(clusters):
+    cx, cy = centroids[i]
+    print(<span class="s">f"Cluster {i+1} (centre {cx:.1f},{cy:.1f}): {c}"</span>)</pre></div><div class="pane"><table class="explain">
+<tr><th style="width:38%">Line of Code</th><th>What this line is doing</th></tr>
+<tr><td><code>points = [...]</code></td><td>12 students' (quiz, assignment) marks — notice there is <b>no label</b> column. The algorithm must find groups itself.</td></tr>
+<tr><td><code>K = 3</code></td><td>We ask for 3 clusters — a hyperparameter we choose (e.g. weak / average / strong students).</td></tr>
+<tr><td><code>centroids = random.sample(points, K)</code></td><td>Initialisation: pick 3 distinct existing points as starting centres (the arhti dropping crates).</td></tr>
+<tr><td><code>clusters = [[] for _ in range(K)]</code></td><td>Fresh empty buckets each iteration — assignments are recomputed from scratch every round.</td></tr>
+<tr><td><code>min(range(K), key=lambda i: dist(p, centroids[i]))</code></td><td>The <b>assignment step</b>: finds the index of the centroid closest to point p. <code>min</code> over indices, keyed by distance.</td></tr>
+<tr><td><code>mean_point(cluster)</code></td><td>The <b>update step</b>: averages all x's and all y's — the centroid slides to its cluster's centre of gravity.</td></tr>
+<tr><td><code>random.choice(points)</code></td><td>Edge case: if a centroid attracted zero points, respawn it on a random point instead of dividing by zero.</td></tr>
+<tr><td><code>if new_centroids == centroids: break</code></td><td>Convergence test: when centroids don't move at all, assignments can never change either — the algorithm is done.</td></tr>
+<tr><td><code>enumerate(clusters)</code></td><td>Prints each cluster with its number, its final centre and its member students.</td></tr>
+</table></div></div>
+<span class="outlabel">▶ EXPECTED OUTPUT</span>
+<pre class="output">Converged after 2 iterations
+Cluster 1 (centre 82.8,87.2): [(80, 85), (82, 88), (85, 90), (84, 86)]
+Cluster 2 (centre 22.5,27.5): [(20, 25), (22, 30), (25, 28), (23, 27)]
+Cluster 3 (centre 47.5,51.5): [(45, 50), (48, 55), (50, 52), (47, 49)]</pre><p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Three natural groups discovered with zero labels: weak (~22,27), average (~47,51) and strong (~83,87) students. Cluster numbering may shuffle between runs — the groups themselves stay the same.</p>
+
+
+
+
+<div class="task"><span class="tag">📝 Exercises — Week 16</span>
+<ol>
+<li>Run the code 5 times. Do you always get the same 3 clusters? Explain the role of random initialisation.</li>
+<li>Set K = 2 and K = 4. Which K matches the data's natural structure best? (Hint: look at the 3 obvious groups in the marks.)</li>
+<li>Add a total Within-Cluster Sum of Squares (WCSS) computation and print it each run — the basis of the "elbow method".</li>
+</ol></div>
+
+<h3>Course Review Map — Weeks 10–16</h3>
+<table class="explain">
+<tr><th>Week</th><th>Technique</th><th>Type</th><th>One-line essence</th></tr>
+<tr><td>10</td><td>Genetic Algorithms</td><td>Search / Optimisation</td><td>Evolve a population of solutions by survival of the fittest.</td></tr>
+<tr><td>11</td><td>Frames & Semantic Nets</td><td>Knowledge Representation</td><td>Store facts as structured objects; inherit up the is-a chain.</td></tr>
+<tr><td>12</td><td>Propositional Logic</td><td>Reasoning</td><td>Truth tables & model checking decide what a KB entails.</td></tr>
+<tr><td>13</td><td>FOL & Unification</td><td>Reasoning</td><td>Quantifiers generalise; unification matches patterns to fire rules.</td></tr>
+<tr><td>14</td><td>Perceptron</td><td>Supervised Learning</td><td>Learn a separating line from labeled mistakes.</td></tr>
+<tr><td>15</td><td>Naïve Bayes / K-NN</td><td>Supervised Learning</td><td>Multiply likelihoods; or let the nearest neighbours vote.</td></tr>
+<tr><td>16</td><td>K-Means</td><td>Unsupervised Learning</td><td>Assign–update loop discovers groups with no labels at all.</td></tr>
+</table>
+
+<footer style="text-align:center;color:var(--muted);margin:40px 0 20px;font-size:13px">
+CSAL3241 Artificial Intelligence Lab · Prof. Muhammad Tahir Mehmood · Weeks 10–16 Lab Manual<br>
+Texts: Russell & Norvig, <i>AI: A Modern Approach</i> · Ben Coppin, <i>AI Illuminated</i>
+</footer>
+</div><!-- /main -->
+<script>
+/* ============ Scrollspy ============ */
+const links=[...document.querySelectorAll('#sidebar a')];
+const targets=links.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{
+  let best=0;
+  targets.forEach((t,i)=>{if(t&&t.getBoundingClientRect().top<140)best=i;});
+  links.forEach((a,i)=>a.classList.toggle('active',i===best));
+});
+
+/* ============ Helpers ============ */
+function clear(ctx,w,h){ctx.clearRect(0,0,w,h);}
+
+/* ============ W10: 8-Queens GA ============ */
+const qc=document.getElementById('cvQueens'),qx=qc.getContext('2d');
+let qPop=[],qGen=0,qHist=[],qTimer=null;
+function qFit(ch){let cl=0;for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){if(ch[i]===ch[j])cl++;if(Math.abs(ch[i]-ch[j])===j-i)cl++;}return 28-cl;}
+function qInit(){qPop=[];for(let i=0;i<100;i++){qPop.push(Array.from({length:8},()=>1+Math.floor(Math.random()*8)));}qGen=0;qHist=[];}
+function qEvolve(){
+  qPop.sort((a,b)=>qFit(b)-qFit(a));
+  if(qFit(qPop[0])===28)return true;
+  const np=qPop.slice(0,10);
+  const pick=()=>{let best=null;for(let k=0;k<3;k++){const c=qPop[Math.floor(Math.random()*qPop.length)];if(!best||qFit(c)>qFit(best))best=c;}return best;};
+  while(np.length<100){
+    const p1=pick(),p2=pick(),pt=1+Math.floor(Math.random()*7);
+    const ch=p1.slice(0,pt).concat(p2.slice(pt));
+    if(Math.random()<0.15)ch[Math.floor(Math.random()*8)]=1+Math.floor(Math.random()*8);
+    np.push(ch);
+  }
+  qPop=np;qGen++;return false;
+}
+function qDraw(){
+  clear(qx,760,420);
+  const best=qPop.slice().sort((a,b)=>qFit(b)-qFit(a))[0],f=qFit(best);
+  const cs=44,ox=20,oy=30;
+  qx.font='bold 15px Segoe UI';qx.fillStyle='#0d47a1';
+  qx.fillText('Generation: '+qGen+'   Best fitness: '+f+' / 28',ox,20);
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    qx.fillStyle=(r+c)%2?'#c8d8f0':'#f4f7fc';
+    qx.fillRect(ox+c*cs,oy+r*cs,cs,cs);
+  }
+  qx.strokeStyle='#0d47a1';qx.strokeRect(ox,oy,cs*8,cs*8);
+  // attacking lines
+  qx.strokeStyle='rgba(197,34,31,.65)';qx.lineWidth=2;
+  for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){
+    if(best[i]===best[j]||Math.abs(best[i]-best[j])===j-i){
+      qx.beginPath();
+      qx.moveTo(ox+i*cs+cs/2,oy+(best[i]-1)*cs+cs/2);
+      qx.lineTo(ox+j*cs+cs/2,oy+(best[j]-1)*cs+cs/2);
+      qx.stroke();
+    }
+  }
+  qx.lineWidth=1;qx.font='26px Segoe UI';
+  for(let c=0;c<8;c++){qx.fillText('♛',ox+c*cs+9,oy+(best[c]-1)*cs+33);}
+  // fitness chart
+  const gx=430,gy=60,gw=310,gh=300;
+  qx.strokeStyle='#dfe3e8';qx.strokeRect(gx,gy,gw,gh);
+  qx.fillStyle='#5f6368';qx.font='13px Segoe UI';
+  qx.fillText('Fitness over generations',gx+60,gy-8);
+  qx.fillText('28',gx-22,gy+10);qx.fillText('20',gx-22,gy+gh-((20)/28)*gh+4);
+  qHist.push(f);if(qHist.length>150)qHist.shift();
+  qx.strokeStyle='#188038';qx.lineWidth=2.5;qx.beginPath();
+  qHist.forEach((v,i)=>{const px=gx+(i/149)*gw,py=gy+gh-(v/28)*gh;i?qx.lineTo(px,py):qx.moveTo(px,py);});
+  qx.stroke();qx.lineWidth=1;
+  if(f===28){qx.fillStyle='#188038';qx.font='bold 18px Segoe UI';qx.fillText('✔ Perfect solution evolved!',gx+30,gy+gh+35);}
+}
+function qStart(){if(qTimer)return;qTimer=setInterval(()=>{const done=qEvolve();qDraw();if(done){clearInterval(qTimer);qTimer=null;}},120);}
+function qReset(){if(qTimer){clearInterval(qTimer);qTimer=null;}qInit();qDraw();}
+qInit();qDraw();
+
+/* ============ W10: TSP GA ============ */
+const tc=document.getElementById('cvTSP'),tx=tc.getContext('2d');
+const tCities=[{n:'Islamabad',x:380,y:50},{n:'Faisalabad',x:390,y:190},{n:'Lahore',x:560,y:180},{n:'Okara',x:470,y:255},{n:'Sahiwal',x:420,y:290},{n:'Multan',x:220,y:330}];
+let tPop=[],tGen=0,tTimer=null;
+function tLen(r){let s=0;for(let i=0;i<r.length;i++){const a=tCities[r[i]],b=tCities[r[(i+1)%r.length]];s+=Math.hypot(a.x-b.x,a.y-b.y);}return s;}
+function tShuffle(){const a=[0,1,2,3,4,5];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function tInit(){tPop=[];for(let i=0;i<80;i++)tPop.push(tShuffle());tGen=0;}
+function tOX(p1,p2){let a=Math.floor(Math.random()*6),b=Math.floor(Math.random()*6);if(a>b)[a,b]=[b,a];
+  const ch=Array(6).fill(null);for(let i=a;i<b;i++)ch[i]=p1[i];
+  const fill=p2.filter(c=>!ch.includes(c));let k=0;
+  for(let i=0;i<6;i++)if(ch[i]===null)ch[i]=fill[k++];return ch;}
+function tStepGen(){
+  tPop.sort((a,b)=>tLen(a)-tLen(b));
+  const np=tPop.slice(0,8);
+  while(np.length<80){
+    const p1=tPop[Math.floor(Math.random()*30)],p2=tPop[Math.floor(Math.random()*30)];
+    const ch=tOX(p1,p2);
+    if(Math.random()<0.25){const i=Math.floor(Math.random()*6),j=Math.floor(Math.random()*6);[ch[i],ch[j]]=[ch[j],ch[i]];}
+    np.push(ch);
+  }
+  tPop=np;tGen++;
+}
+function tDraw(){
+  clear(tx,760,400);
+  const best=tPop.slice().sort((a,b)=>tLen(a)-tLen(b))[0];
+  tx.font='bold 15px Segoe UI';tx.fillStyle='#0d47a1';
+  tx.fillText('Generation: '+tGen+'   Best route length: '+Math.round(tLen(best))+' px',20,25);
+  tx.strokeStyle='#1a73e8';tx.lineWidth=2.5;tx.beginPath();
+  best.forEach((ci,i)=>{const c=tCities[ci];i?tx.lineTo(c.x,c.y):tx.moveTo(c.x,c.y);});
+  const f=tCities[best[0]];tx.lineTo(f.x,f.y);tx.stroke();tx.lineWidth=1;
+  tCities.forEach(c=>{
+    tx.fillStyle='#c5221f';tx.beginPath();tx.arc(c.x,c.y,7,0,7);tx.fill();
+    tx.fillStyle='#202124';tx.font='13px Segoe UI';tx.fillText(c.n,c.x+10,c.y+4);
+  });
+}
+function tStart(){if(tTimer)return;let n=0;tTimer=setInterval(()=>{tStepGen();tDraw();if(++n>150){clearInterval(tTimer);tTimer=null;}},60);}
+function tReset(){if(tTimer){clearInterval(tTimer);tTimer=null;}tInit();tDraw();}
+tInit();tDraw();
+
+/* ============ W11: Semantic Net ============ */
+const sc=document.getElementById('cvSem'),sx=sc.getContext('2d');
+const sNodes=[{n:'Mithoo',x:120,y:320,p:'owner: Nani Amma'},{n:'Parrot',x:300,y:250,p:'colour: green'},{n:'Bird',x:470,y:170,p:'can_fly: TRUE ✔'},{n:'Animal',x:620,y:90,p:'alive: true'}];
+let sStep=-1,sTimer=null;
+function sDraw(){
+  clear(sx,760,400);
+  sx.strokeStyle='#5f6368';sx.lineWidth=2;
+  for(let i=0;i<3;i++){
+    const a=sNodes[i],b=sNodes[i+1];
+    sx.strokeStyle=(i<sStep)?'#e8710a':'#9aa0a6';
+    sx.beginPath();sx.moveTo(a.x+55,a.y-15);sx.lineTo(b.x-55,b.y+15);sx.stroke();
+    sx.fillStyle='#5f6368';sx.font='italic 12px Segoe UI';
+    sx.fillText('is-a',(a.x+b.x)/2-5,(a.y+b.y)/2-6);
+  }
+  sNodes.forEach((nd,i)=>{
+    const hot=(i===sStep);
+    sx.fillStyle=hot?(i===2?'#e6f4ea':'#fff3e0'):'#e8f0fe';
+    sx.strokeStyle=hot?(i===2?'#188038':'#e8710a'):'#a3c4f3';sx.lineWidth=hot?3:2;
+    sx.beginPath();sx.roundRect(nd.x-58,nd.y-24,116,48,10);sx.fill();sx.stroke();
+    sx.fillStyle='#202124';sx.font='bold 14px Segoe UI';sx.textAlign='center';
+    sx.fillText(nd.n,nd.x,nd.y-2);
+    sx.font='11px Segoe UI';sx.fillStyle='#5f6368';sx.fillText(nd.p,nd.x,nd.y+14);
+    sx.textAlign='left';
+  });
+  sx.font='bold 15px Segoe UI';sx.fillStyle='#0d47a1';
+  const msgs=['Click to ask: Can Mithoo fly?','Checking Mithoo… no can_fly slot. Climb is-a ↑','Checking Parrot… no can_fly slot. Climb is-a ↑','FOUND at Bird: can_fly = TRUE → Answer: YES, Mithoo can fly! (inherited)'];
+  sx.fillText(msgs[Math.min(sStep+1,3)],30,35);
+  sx.lineWidth=1;
+}
+function sQuery(){if(sTimer)return;sStep=-1;let i=0;sTimer=setInterval(()=>{sStep=i;sDraw();if(++i>2){clearInterval(sTimer);sTimer=null;}},900);}
+function sReset(){if(sTimer){clearInterval(sTimer);sTimer=null;}sStep=-1;sDraw();}
+sDraw();
+
+/* ============ W12: Wumpus ============ */
+const wc=document.getElementById('cvWumpus'),wx=wc.getContext('2d');
+let wIdx=0;
+const wSteps=[
+ {msg:'Start at [1,1]. Percept: NO breeze, NO stench.',safe:[[1,1]],pit:[],wum:[],rule:'¬B(1,1) → ¬Pit in neighbours'},
+ {msg:'Rule fires: [1,2] and [2,1] are SAFE.',safe:[[1,1],[1,2],[2,1]],pit:[],wum:[],rule:'¬B(1,1) → ¬P(1,2) ∧ ¬P(2,1)'},
+ {msg:'Move to [2,1]. Percept: BREEZE!',safe:[[1,1],[1,2],[2,1]],pit:[[2,2],[3,1]],wum:[],rule:'B(2,1) → P(2,2) ∨ P(3,1)'},
+ {msg:'Move to [1,2]. Percept: STENCH, no breeze.',safe:[[1,1],[1,2],[2,1],[1,3],[2,2]],pit:[[3,1]],wum:[[1,3],[2,2]],rule:'¬B(1,2) → ¬P(2,2) ∧ ¬P(1,3) — pit must be [3,1]!'},
+ {msg:'Wumpus at [1,3] or [2,2]. But [2,2] pit-free & no stench at [2,1] ⇒ Wumpus at [1,3]!',safe:[[1,1],[1,2],[2,1],[2,2]],pit:[[3,1]],wum:[[1,3]],rule:'Resolution narrows Wumpus to [1,3]. Safe path via [2,2] found ✔'}
+];
+function wDraw(){
+  clear(wx,640,430);
+  const st=wSteps[wIdx],cs=80,ox=40,oy=70;
+  wx.font='bold 14px Segoe UI';wx.fillStyle='#0d47a1';
+  wx.fillText('Step '+(wIdx+1)+'/5: '+st.msg,20,25);
+  wx.fillStyle='#7b1fa2';wx.font='13px Segoe UI';
+  wx.fillText('Logic: '+st.rule,20,47);
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){
+    const gx2=ox+c*cs,gy2=oy+(3-r)*cs;
+    const cell=[c+1,r+1];
+    const has=(arr)=>arr.some(p=>p[0]===cell[0]&&p[1]===cell[1]);
+    wx.fillStyle=has(st.safe)?'#e6f4ea':has(st.pit)?'#fce8e6':has(st.wum)?'#fff3e0':'#f8f9fb';
+    wx.fillRect(gx2,gy2,cs,cs);
+    wx.strokeStyle='#dfe3e8';wx.strokeRect(gx2,gy2,cs,cs);
+    wx.fillStyle='#5f6368';wx.font='10px Segoe UI';
+    wx.fillText('['+cell[0]+','+cell[1]+']',gx2+4,gy2+13);
+    wx.font='bold 13px Segoe UI';
+    if(has(st.safe)){wx.fillStyle='#188038';wx.fillText('SAFE',gx2+20,gy2+45);}
+    if(has(st.pit)){wx.fillStyle='#c5221f';wx.fillText('P?',gx2+30,gy2+45);}
+    if(has(st.wum)){wx.fillStyle='#e8710a';wx.fillText('W?',gx2+30,gy2+62);}
+  }
+  wx.font='24px Segoe UI';
+  wx.fillText('🤖',ox+((wIdx>=3)?0:(wIdx>=2?1:0))*cs+28,oy+(3-((wIdx>=3)?1:0))*cs+50);
+  // legend
+  wx.font='12px Segoe UI';wx.fillStyle='#188038';wx.fillText('■ proven safe',400,110);
+  wx.fillStyle='#c5221f';wx.fillText('■ possible pit',400,130);
+  wx.fillStyle='#e8710a';wx.fillText('■ possible Wumpus',400,150);
+}
+function wStep(){wIdx=(wIdx+1)%wSteps.length;wDraw();}
+function wReset(){wIdx=0;wDraw();}
+wDraw();
+
+/* ============ W13: Unification ============ */
+const uc=document.getElementById('cvUnify'),ux=uc.getContext('2d');
+let uIdx=0;
+const uSteps=[
+ {m:'Goal: unify Knows(ali, x) with Knows(y, mother(y))',t:'θ = { }',e1:'Knows(ali, x)',e2:'Knows(y, mother(y))'},
+ {m:'Step 1: Predicate names match (Knows/2 = Knows/2) ✔',t:'θ = { }',e1:'Knows(ali, x)',e2:'Knows(y, mother(y))'},
+ {m:'Step 2: arg1 — ali vs y. y is a variable → bind y/ali',t:'θ = { y / ali }',e1:'Knows(ali, x)',e2:'Knows(ali, mother(ali))'},
+ {m:'Step 3: arg2 — x vs mother(ali). x is a variable → bind x/mother(ali)',t:'θ = { y/ali,  x/mother(ali) }',e1:'Knows(ali, mother(ali))',e2:'Knows(ali, mother(ali))'},
+ {m:'DONE ✔ Both expressions identical. θ is the Most General Unifier.',t:'MGU = { y/ali,  x/mother(ali) }',e1:'Knows(ali, mother(ali))',e2:'Knows(ali, mother(ali))'}
+];
+function uDraw(){
+  clear(ux,760,330);
+  const s=uSteps[uIdx],done=uIdx===4;
+  ux.font='bold 15px Segoe UI';ux.fillStyle='#0d47a1';
+  ux.fillText('Step '+uIdx+'/4: '+s.m,20,30);
+  ux.font='bold 22px Consolas';
+  ux.fillStyle=done?'#188038':'#202124';
+  ux.fillText(s.e1,60,110);
+  ux.fillText(s.e2,60,170);
+  ux.strokeStyle=done?'#188038':'#9aa0a6';ux.lineWidth=2;
+  ux.beginPath();ux.moveTo(60,132);ux.lineTo(560,132);ux.stroke();ux.lineWidth=1;
+  ux.fillStyle='#fff8e1';ux.strokeStyle='#f9c74f';
+  ux.beginPath();ux.roundRect(60,210,640,70,12);ux.fill();ux.stroke();
+  ux.fillStyle='#b26a00';ux.font='bold 13px Segoe UI';ux.fillText('SUBSTITUTION SET',80,235);
+  ux.fillStyle='#202124';ux.font='bold 20px Consolas';ux.fillText(s.t,80,265);
+}
+function uStep(){uIdx=Math.min(uIdx+1,4);uDraw();}
+function uReset(){uIdx=0;uDraw();}
+uDraw();
+
+/* ============ W14: Perceptron ============ */
+const pc=document.getElementById('cvPerc'),px=pc.getContext('2d');
+let pw1=0,pw2=0,pb=0,pEpoch=0,pTimer=null,pDone=false;
+const pData=[[0,0,0],[0,1,0],[1,0,0],[1,1,1]];
+function pMap(x,y){return[110+x*220,330-y*220];}
+function pDraw(){
+  clear(px,760,400);
+  px.font='bold 15px Segoe UI';px.fillStyle='#0d47a1';
+  px.fillText('Training AND gate — Epoch '+pEpoch+(pDone?'  ✔ CONVERGED':''),20,25);
+  // axes
+  px.strokeStyle='#9aa0a6';
+  px.beginPath();px.moveTo(110,60);px.lineTo(110,330);px.lineTo(400,330);px.stroke();
+  px.fillStyle='#5f6368';px.font='12px Segoe UI';
+  px.fillText('x1',405,335);px.fillText('x2',95,55);
+  px.fillText('0',98,345);px.fillText('1',326,345);px.fillText('1',96,116);
+  // decision line w1*x + w2*y + b = 0
+  if(pw2!==0||pw1!==0){
+    px.strokeStyle='#1a73e8';px.lineWidth=3;px.beginPath();let pts=[];
+    for(let gx=-0.5;gx<=1.6;gx+=0.02){
+      if(pw2!==0){const gy=(-pb-pw1*gx)/pw2;if(gy>=-0.5&&gy<=1.6)pts.push(pMap(gx,gy));}
+    }
+    if(pw2===0&&pw1!==0){const gx=-pb/pw1;pts=[pMap(gx,-0.4),pMap(gx,1.5)];}
+    pts.forEach((p,i)=>i?px.lineTo(p[0],p[1]):px.moveTo(p[0],p[1]));
+    px.stroke();px.lineWidth=1;
+  }
+  pData.forEach(([x,y,t])=>{
+    const[cx2,cy2]=pMap(x,y);
+    if(t){px.fillStyle='#188038';px.fillRect(cx2-9,cy2-9,18,18);}
+    else{px.fillStyle='#c5221f';px.beginPath();px.arc(cx2,cy2,9,0,7);px.fill();}
+    px.fillStyle='#202124';px.font='12px Segoe UI';px.fillText('('+x+','+y+')→'+t,cx2+13,cy2+4);
+  });
+  // weights panel
+  px.fillStyle='#e8f0fe';px.strokeStyle='#a3c4f3';
+  px.beginPath();px.roundRect(460,80,270,180,12);px.fill();px.stroke();
+  px.fillStyle='#0d47a1';px.font='bold 14px Segoe UI';px.fillText('Learned parameters',480,110);
+  px.fillStyle='#202124';px.font='18px Consolas';
+  px.fillText('w1 = '+pw1.toFixed(2),480,145);
+  px.fillText('w2 = '+pw2.toFixed(2),480,175);
+  px.fillText('b  = '+pb.toFixed(2),480,205);
+  px.font='13px Segoe UI';px.fillStyle='#5f6368';
+  px.fillText('Line: w1·x1 + w2·x2 + b = 0',480,240);
+}
+function pTrainStep(){
+  if(pDone)return;
+  let errs=0;
+  pData.forEach(([x1,x2,t])=>{
+    const out=(pw1*x1+pw2*x2+pb)>=0?1:0,e=t-out;
+    if(e!==0){pw1+=0.1*e*x1;pw2+=0.1*e*x2;pb+=0.1*e;errs++;}
+  });
+  pEpoch++;if(errs===0)pDone=true;
+  pDraw();
+}
+function pAuto(){if(pTimer)return;pTimer=setInterval(()=>{pTrainStep();if(pDone){clearInterval(pTimer);pTimer=null;}},350);}
+function pReset(){if(pTimer){clearInterval(pTimer);pTimer=null;}pw1=pw2=pb=0;pEpoch=0;pDone=false;pDraw();}
+pDraw();
+
+/* ============ W15: KNN ============ */
+const kc=document.getElementById('cvKNN'),kx=kc.getContext('2d');
+const kPts=[[2,60,'F'],[3,65,'F'],[4,55,'F'],[5,70,'F'],[6,50,'F'],[8,80,'P'],[9,85,'P'],[10,90,'P'],[12,95,'P'],[7,88,'P']];
+const kQ=[6,75];let kK=0;
+function kMap(h,a){return[60+h*52,370-(a-40)*5.4];}
+function kDraw(){
+  clear(kx,760,400);
+  kx.font='bold 15px Segoe UI';kx.fillStyle='#0d47a1';
+  kx.fillText(kK?('K = '+kK+' voting…'):'New student ★ at (6 hrs, 75%) — choose K to classify',20,22);
+  kx.strokeStyle='#9aa0a6';kx.beginPath();kx.moveTo(60,40);kx.lineTo(60,370);kx.lineTo(730,370);kx.stroke();
+  kx.fillStyle='#5f6368';kx.font='12px Segoe UI';
+  kx.fillText('study hours →',600,390);kx.save();kx.translate(30,240);kx.rotate(-Math.PI/2);kx.fillText('attendance % →',0,0);kx.restore();
+  const[qx2,qy2]=kMap(...kQ);
+  let dists=kPts.map(p=>({p,d:Math.hypot(p[0]-kQ[0],p[1]-kQ[1])})).sort((a,b)=>a.d-b.d);
+  let verdict='';
+  if(kK){
+    const near=dists.slice(0,kK);
+    const maxPix=Math.max(...near.map(n=>Math.hypot(kMap(n.p[0],n.p[1])[0]-qx2,kMap(n.p[0],n.p[1])[1]-qy2)));
+    kx.strokeStyle='rgba(123,31,162,.5)';kx.setLineDash([6,4]);
+    kx.beginPath();kx.arc(qx2,qy2,maxPix+12,0,7);kx.stroke();kx.setLineDash([]);
+    near.forEach(n=>{const[nx,ny]=kMap(n.p[0],n.p[1]);
+      kx.strokeStyle='#7b1fa2';kx.beginPath();kx.moveTo(qx2,qy2);kx.lineTo(nx,ny);kx.stroke();});
+    const pv=near.filter(n=>n.p[2]==='P').length,fv=kK-pv;
+    verdict=(pv>fv?'PASS':'FAIL')+'  (votes: Pass '+pv+' – Fail '+fv+')';
+  }
+  kPts.forEach(([h,a,c])=>{
+    const[cx2,cy2]=kMap(h,a);
+    kx.fillStyle=c==='P'?'#1a73e8':'#e8710a';
+    kx.beginPath();kx.arc(cx2,cy2,8,0,7);kx.fill();
+  });
+  kx.fillStyle=kK?(verdict.startsWith('PASS')?'#1a73e8':'#e8710a'):'#202124';
+  kx.font='26px Segoe UI';kx.fillText('★',qx2-11,qy2+9);
+  kx.font='bold 16px Segoe UI';
+  if(verdict)kx.fillText('Prediction: '+verdict,340,22);
+  kx.fillStyle='#1a73e8';kx.font='13px Segoe UI';kx.fillText('● Pass',640,60);
+  kx.fillStyle='#e8710a';kx.fillText('● Fail',640,80);
+}
+function knnClassify(k){kK=k;kDraw();}
+function knnReset(){kK=0;kDraw();}
+kDraw();
+
+/* ============ W16: K-Means ============ */
+const kmc=document.getElementById('cvKM'),kmx=kmc.getContext('2d');
+const kmPts=[[20,25],[22,30],[25,28],[23,27],[45,50],[48,55],[50,52],[47,49],[80,85],[82,88],[85,90],[84,86]];
+const kmCols=['#1a73e8','#e8710a','#188038'];
+let kmCent=[],kmAssign=[],kmPaths=[],kmIter=0,kmTimer=null,kmConv=false;
+function kmMap(x,y){return[60+x*7.4,370-y*3.4];}
+function kmInit(){
+  const idx=[];while(idx.length<3){const i=Math.floor(Math.random()*kmPts.length);if(!idx.includes(i))idx.push(i);}
+  kmCent=idx.map(i=>[...kmPts[i]]);kmPaths=kmCent.map(c=>[[...c]]);
+  kmAssign=kmPts.map(()=> -1);kmIter=0;kmConv=false;
+}
+function kmStep(){
+  if(kmConv)return;
+  kmAssign=kmPts.map(p=>{let bi=0,bd=1e9;kmCent.forEach((c,i)=>{const d=Math.hypot(p[0]-c[0],p[1]-c[1]);if(d<bd){bd=d;bi=i;}});return bi;});
+  let moved=false;
+  kmCent=kmCent.map((c,i)=>{
+    const mem=kmPts.filter((_,j)=>kmAssign[j]===i);
+    if(!mem.length)return c;
+    const nx=mem.reduce((s,p)=>s+p[0],0)/mem.length,ny=mem.reduce((s,p)=>s+p[1],0)/mem.length;
+    if(Math.abs(nx-c[0])>0.01||Math.abs(ny-c[1])>0.01)moved=true;
+    kmPaths[i].push([nx,ny]);return[nx,ny];
+  });
+  kmIter++;if(!moved)kmConv=true;
+  kmDraw();
+}
+function kmDraw(){
+  clear(kmx,760,400);
+  kmx.font='bold 15px Segoe UI';kmx.fillStyle='#0d47a1';
+  kmx.fillText('Iteration '+kmIter+(kmConv?'  ✔ CONVERGED — centroids stopped moving':''),20,22);
+  kmx.strokeStyle='#9aa0a6';kmx.beginPath();kmx.moveTo(60,40);kmx.lineTo(60,370);kmx.lineTo(730,370);kmx.stroke();
+  kmx.fillStyle='#5f6368';kmx.font='12px Segoe UI';
+  kmx.fillText('quiz marks →',620,390);kmx.save();kmx.translate(30,260);kmx.rotate(-Math.PI/2);kmx.fillText('assignment marks →',0,0);kmx.restore();
+  kmPaths.forEach((path,i)=>{
+    kmx.strokeStyle=kmCols[i];kmx.setLineDash([4,4]);kmx.beginPath();
+    path.forEach((p,j)=>{const[mx,my]=kmMap(p[0],p[1]);j?kmx.lineTo(mx,my):kmx.moveTo(mx,my);});
+    kmx.stroke();kmx.setLineDash([]);
+  });
+  kmPts.forEach((p,j)=>{
+    const[mx,my]=kmMap(p[0],p[1]);
+    kmx.fillStyle=kmAssign[j]>=0?kmCols[kmAssign[j]]:'#9aa0a6';
+    kmx.beginPath();kmx.arc(mx,my,8,0,7);kmx.fill();
+  });
+  kmCent.forEach((c,i)=>{
+    const[mx,my]=kmMap(c[0],c[1]);
+    kmx.strokeStyle=kmCols[i];kmx.lineWidth=4;
+    kmx.beginPath();kmx.moveTo(mx-10,my-10);kmx.lineTo(mx+10,my+10);kmx.moveTo(mx+10,my-10);kmx.lineTo(mx-10,my+10);kmx.stroke();kmx.lineWidth=1;
+  });
+}
+function kmAuto(){if(kmTimer)return;kmTimer=setInterval(()=>{kmStep();if(kmConv){clearInterval(kmTimer);kmTimer=null;}},700);}
+function kmReset(){if(kmTimer){clearInterval(kmTimer);kmTimer=null;}kmInit();kmDraw();}
+kmInit();kmDraw();
+</script>
+
+<div id="codeModal">
+  <div class="mhead"><h3 id="mTitle">Side-by-Side View — Code &amp; Explanation</h3>
+  <button class="mclose" onclick="ccClose()">✕ Close (Esc)</button></div>
+  <div class="mgrid">
+    <div class="mpane dark"><div class="mtag">💻 Complete Python Code</div><div id="mCode"></div></div>
+    <div class="mpane"><div class="mtag">📖 Line-by-Line Explanation</div><div id="mExp"></div></div>
+  </div>
+</div>
+<div class="copied-toast" id="toast">✔ Code copied to clipboard — paste it into IDLE / Colab</div>
+<script>
+function ccTab(n,idx,btn){
+  const card=document.getElementById('cc'+n);
+  card.querySelectorAll('.pane').forEach((p,i)=>p.classList.toggle('on',i===idx));
+  card.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+}
+function ccCopy(n){
+  const pre=document.getElementById('cc'+n).querySelector('pre.code');
+  const txt=pre.innerText;
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(showToast).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');ta.remove();showToast();
+  });
+}
+function showToast(){
+  const t=document.getElementById('toast');t.style.display='block';
+  setTimeout(()=>t.style.display='none',1800);
+}
+function ccFull(n){
+  const card=document.getElementById('cc'+n);
+  const title=(function(){let el=card.previousElementSibling;
+    while(el){if(el.tagName==='H3')return el.innerText;el=el.previousElementSibling;}return 'Code & Explanation';})();
+  document.getElementById('mTitle').innerText='⛶ '+title;
+  document.getElementById('mCode').innerHTML=card.querySelectorAll('.pane')[0].innerHTML;
+  document.getElementById('mExp').innerHTML=card.querySelectorAll('.pane')[1].innerHTML;
+  document.getElementById('codeModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function ccClose(){
+  document.getElementById('codeModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')ccClose();});
+document.getElementById('codeModal').addEventListener('click',e=>{if(e.target.id==='codeModal')ccClose();});
+</script>
+
+</body>
+</html>
