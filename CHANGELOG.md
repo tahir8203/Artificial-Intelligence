@@ -1,5 +1,10 @@
 # Changelog
 
+## Lecture 14 ANN rendering correction
+
+- Fixed the ANN lecture asset insertion so bundled library code remains inside its script elements instead of appearing as visible page text.
+- Verified all Lecture 14 scripts parse correctly while keeping the original neural-network lesson content unchanged.
+
 ## Lecture workspace cleanup
 
 - Removed the large portal-level lecture title and description that duplicated each lesson's own introduction.
